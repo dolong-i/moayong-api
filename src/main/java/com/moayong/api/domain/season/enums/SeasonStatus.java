@@ -1,4 +1,4 @@
-package com.moayong.api.domain.enums;
+package com.moayong.api.domain.season.enums;
 
 public enum SeasonStatus {
     CLOSE, OPEN, PAUSE
