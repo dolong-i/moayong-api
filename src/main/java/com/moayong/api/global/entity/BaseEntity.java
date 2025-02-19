@@ -1,7 +1,6 @@
 package com.moayong.api.global.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
