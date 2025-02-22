@@ -45,7 +45,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse<?>> handleDomainSpecificException(DomainSpecificException ex) {
         log.error("{} exception: {}", ex.getDomain(), ex.getMessage(), ex);
         return ResponseEntity.status(ex.getStatus())
-                .body(ApiResponse.error(ex.getStatus().value(), ex.getMessage()));
+                .body(ApiResponse.error(ex.getStatus().value(), ex.getCustomMessage()));
     }
 
     // 기타 미처리 예외 처리
