@@ -1,4 +1,6 @@
 spring:
+  profiles:
+    include: secret
   jpa:
     show-sql: true
     hibernate:
@@ -19,9 +21,3 @@ spring:
     username: root
     hikari:
       password: 1
-
-
-jwt:
-  secret: "b7f3e8a9d5c6a1e2f4b8d7e3c2a9f5d6"
-  token-validity-in-seconds: 3600 #
-  refresh-token-validity-in-seconds: 86400
