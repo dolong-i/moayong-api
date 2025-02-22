@@ -14,8 +14,8 @@ public enum TierEnum {
     private final int id;
     private final String type;
     private final String imageUrl;
-    private final int FIRST = 5;
-    private final int LAST = 1;
+    private final int FIRST = 1;
+    private final int LAST = 5;
 
     TierEnum(int id, String type, String imageUrl) {
         this.id = id;
