@@ -7,6 +7,6 @@ import lombok.Getter;
 @Getter
 public class SeasonException extends DomainSpecificException {
     public SeasonException(SeasonErrorCode errorCode) {
-        super("League", errorCode.getStatus(), errorCode.getMessage());
+        super("Season", errorCode.getStatus(), errorCode.getMessage());
     }
 }

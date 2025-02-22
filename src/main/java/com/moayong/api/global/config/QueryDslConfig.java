@@ -2,20 +2,22 @@ package com.moayong.api.global.config;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @Configuration
 public class QueryDslConfig {
 
-    private final EntityManager entityManager;
+    @PersistenceContext
+    private EntityManager entityManager;
 
-    public QueryDslConfig(EntityManager entityManager) {
-        this.entityManager = entityManager;
+    public QueryDslConfig() {
     }
 
     @Bean
-    public JPAQueryFactory queryFactory() {
-        return new JPAQueryFactory(entityManager);
+    public JPAQueryFactory jpaQueryFactory() {
+        return new JPAQueryFactory(this.entityManager);
     }
 }

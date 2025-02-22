@@ -12,7 +12,7 @@ public record SeasonSaveRequest (
 ){
     public Season toEntity() {
         return Season.builder()
-                .season(number)
+                .number(number)
                 .status(status)
                 .build();
     }

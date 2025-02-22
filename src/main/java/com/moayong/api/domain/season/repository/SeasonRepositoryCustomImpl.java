@@ -4,21 +4,19 @@ import com.moayong.api.domain.season.domain.QSeason;
 import com.moayong.api.domain.season.domain.Season;
 import com.moayong.api.domain.season.enums.SeasonStatus;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+@RequiredArgsConstructor
+@Repository
 public class SeasonRepositoryCustomImpl implements SeasonRepositoryCustom {
-
     private final JPAQueryFactory queryFactory;
 
-    @Autowired
-    public SeasonRepositoryCustomImpl(JPAQueryFactory queryFactory) {
-        this.queryFactory = queryFactory;
-    }
-
     @Override
-    public Optional<Season> findCurrentSeason() {
+    public Optional<Season> findOpenSeason() {
         QSeason qSeason = QSeason.season;
 
         Season season = queryFactory.selectFrom(qSeason)
