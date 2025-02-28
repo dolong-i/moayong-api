@@ -17,7 +17,7 @@ public abstract class DomainSpecificException extends RuntimeException {
         super(message);
         this.domain = domain;
         this.status = status;
-        this.code = domain + "_" + errorCode.name(); // 도메인_에러코드
+        this.code = errorCode.name();
         this.errorData = errorData != null ? errorData : new HashMap<>();
     }
 
