@@ -11,17 +11,15 @@ import com.moayong.api.domain.season.exception.SeasonException;
 import com.moayong.api.domain.season.service.SeasonService;
 import com.moayong.api.global.enums.TierEnum;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.*;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class LeagueService {
@@ -37,7 +35,12 @@ public class LeagueService {
     }
 
     public League findLeagueById(Long id) {
-        return leagueRepository.findById(id).orElseThrow(() -> new LeagueException(LeagueErrorCode.LEAGUE_NOT_FOUND));
+
+        return leagueRepository.findById(id).orElseThrow(() -> {
+            Map<String, Object> errorData = new HashMap<>();
+            errorData.put("id", id);
+            return new LeagueException(LeagueErrorCode.LEAGUE_NOT_FOUND, errorData);
+        });
     }
 
     public List<League> findAllLeagues() {
@@ -49,17 +52,18 @@ public class LeagueService {
         // 락 생성
         Boolean lock = redisTemplate.opsForValue().setIfAbsent("league_creation_lock", "locked", Duration.ofMinutes(5));
         if (lock == null || !lock) {
-            System.out.println("다른 인스턴스에서 이미 리그 생성 중입니다.");
+            log.info("다른 인스턴스에서 리그 생성 중입니다. 리그 생성 요청을 취소합니다.");
             return;
         }
 
         try {
-            System.out.println("리그 생성 시작");
+            log.info("리그 생성 시작");
 
             // 현재 활성화된 시즌 종료
             Season openSeason = seasonService.findOpenSeason().orElse(null);
             if (openSeason != null) {
                 seasonService.updateSeasonStatus(openSeason.getId(), SeasonStatus.CLOSE);
+                log.info("시즌 {} 종료", openSeason.getNumber());
             }
 
             // 새 시즌 생성
@@ -70,15 +74,17 @@ public class LeagueService {
                             .number(newSeasonNumber)
                             .build()
             );
+            log.info("새 시즌 {} 생성", newSeasonNumber);
 
             // 모든 티어에 대해 리그 생성
             List<Integer> tierIds = Arrays.stream(TierEnum.values()).map(TierEnum::getId).toList();
             for (Integer tierId : tierIds) {
                 League league = new League(tierId, newSeason);
                 leagueRepository.save(league);
+                log.info("티어 {}에 대해 리그 생성", tierId);
             }
 
-            System.out.println("새 시즌과 리그 생성 완료!");
+            log.info("새 시즌과 리그 생성 완료!");
         } finally {
             // 락 해제
             redisTemplate.delete("league_creation_lock");

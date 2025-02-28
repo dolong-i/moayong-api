@@ -8,7 +8,9 @@ import com.moayong.api.domain.season.repository.SeasonRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -30,17 +32,16 @@ public class SeasonService {
 
     public Season findSeasonById(Long id) {
         return seasonRepository.findById(id)
-                .orElseThrow(() -> new SeasonException(SeasonErrorCode.SEASON_NOT_FOUND));
+                .orElseThrow(() -> {
+                    Map<String, Object> errorData = new HashMap<>();
+                    errorData.put("id", id);
+                    return new SeasonException(SeasonErrorCode.SEASON_NOT_FOUND, errorData);
+                });
     }
 
     public void updateSeasonStatus(Long id, SeasonStatus status) {
-        Season season = seasonRepository.findById(id)
-                .orElseThrow(() -> new SeasonException(SeasonErrorCode.SEASON_NOT_FOUND));
+        Season season = findSeasonById(id);
         season.setStatus(status);
         seasonRepository.save(season);
-    }
-
-    public Season findSeasonByNumber(Integer number) {
-        return seasonRepository.findByNumber(number);
     }
 }
