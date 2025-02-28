@@ -1,6 +1,5 @@
 package com.moayong.api.global.config;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -12,12 +11,13 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Configuration
 public class RedisConfig {
+    private final String host;
+    private final int port;
 
-    @Value("${spring.data.redis.host}")
-    private String host;
-
-    @Value("${spring.data.redis.port}")
-    private int port;
+    public RedisConfig(RedisProperties redisProperties) {
+        this.host = redisProperties.getHost();
+        this.port = redisProperties.getPort();
+    }
 
     /**
      * Redis 연결을 위한 'Connection' 생성합니다.
