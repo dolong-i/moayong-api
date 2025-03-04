@@ -1,9 +1,9 @@
-package com.moayong.api.domain.auth.security;
+package com.moayong.api.domain.auth.config;
 
+import com.moayong.api.domain.auth.domain.UserTemporary;
 import com.moayong.api.domain.auth.enums.AuthProvider;
 import com.moayong.api.domain.auth.enums.Role;
 import com.moayong.api.domain.user.domain.User;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -11,15 +11,18 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 @Getter
 @RequiredArgsConstructor
 public class UserPrincipal implements OAuth2User, UserDetails {
-    private Long userId;
+    private String userId;
     private String providerId;
     private AuthProvider provider;
     private Role role;
+    private String email;
     private Map<String, Object> attributes;
 
     @Override
@@ -27,21 +30,23 @@ public class UserPrincipal implements OAuth2User, UserDetails {
         return attributes;
     }
 
-    //일반 로그인 생성자
-    public UserPrincipal(User user) {
-        this.userId = user.getId();
-        this.providerId = user.getProviderId();
-        this.provider = user.getProvider();
-        this.role = user.getRole();
-        this.attributes = new HashMap<>();
+    // OAuth 로그인 생성자
+    public UserPrincipal(UserTemporary userTemporary, Map<String, Object> attributes ) {
+        this.userId = userTemporary.getCompositeKey();
+        this.providerId = userTemporary.getProviderId();
+        this.provider = userTemporary.getProvider();
+        this.role = userTemporary.getRole();
+        this.email = userTemporary.getEmail();
+        this.attributes = attributes;
     }
 
-    //OAuth 로그인 생성자
+    // 유저 로그인 생성자
     public UserPrincipal(User user, Map<String, Object> attributes ) {
-        this.userId = user.getId();
+        this.userId = String.valueOf(user.getId());
         this.providerId = user.getProviderId();
         this.provider = user.getProvider();
         this.role = user.getRole();
+        this.email = user.getEmail();
         this.attributes = attributes;
     }
 
@@ -57,7 +62,7 @@ public class UserPrincipal implements OAuth2User, UserDetails {
 
     @Override
     public String getUsername() {
-        return this.providerId;
+        return this.email;
     }
 
     @Override
