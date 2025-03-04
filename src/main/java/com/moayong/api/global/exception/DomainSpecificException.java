@@ -3,7 +3,6 @@ package com.moayong.api.global.exception;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
-import java.util.HashMap;
 import java.util.Map;
 
 @Getter
@@ -18,7 +17,7 @@ public abstract class DomainSpecificException extends RuntimeException {
         this.domain = domain;
         this.status = status;
         this.code = errorCode.name();
-        this.errorData = errorData != null ? errorData : new HashMap<>();
+        this.errorData = errorData;
     }
 
     public String getLogMessage() {
