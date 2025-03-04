@@ -20,4 +20,10 @@ public class KakaoOAuth2UserInfo extends OAuth2UserInfo {
     public AuthProvider getProvider() {
         return AuthProvider.KAKAO;
     }
+
+    // 카카오는 이메일 미지원
+    @Override
+    public String getEmail() {
+        return "kakao@kakao.com";
+    }
 }
