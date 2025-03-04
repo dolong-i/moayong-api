@@ -15,4 +15,5 @@ public abstract class OAuth2UserInfo {
 
     public abstract String getProviderId();
     public abstract AuthProvider getProvider();
+    public abstract String getEmail();
 }

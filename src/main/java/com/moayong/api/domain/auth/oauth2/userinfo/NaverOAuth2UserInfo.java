@@ -21,4 +21,10 @@ public class NaverOAuth2UserInfo extends OAuth2UserInfo {
     public AuthProvider getProvider() {
         return AuthProvider.NAVER;
     }
+
+    @Override
+    public String getEmail() {
+        Map<String, Object> response = (Map<String, Object>) attributes.get("response");
+        return (String) response.get("email");
+    }
 }
