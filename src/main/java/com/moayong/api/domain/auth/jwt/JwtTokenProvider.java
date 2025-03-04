@@ -1,10 +1,12 @@
 package com.moayong.api.domain.auth.jwt;
 
+import com.moayong.api.domain.auth.config.JwtProperties;
 import com.moayong.api.domain.auth.enums.AuthErrorCode;
-import com.moayong.api.domain.auth.security.JwtProperties;
+import com.moayong.api.domain.auth.enums.Role;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -15,13 +17,18 @@ import java.util.Date;
 @Component
 public class JwtTokenProvider {
     private final String jwtSecret;
+    @Getter
     private final long accessTokenExpiration;
+    @Getter
     private final long refreshTokenExpiration;
+    @Getter
+    private final long onboardingAccessTokenExpiration;
 
     public JwtTokenProvider(JwtProperties jwtProperties) {
         this.jwtSecret = jwtProperties.getSecret();
         this.accessTokenExpiration = jwtProperties.getAccessTokenExpiration();
         this.refreshTokenExpiration = jwtProperties.getRefreshTokenExpiration();
+        this.onboardingAccessTokenExpiration = jwtProperties.getOnboardingAccessTokenExpiration();
     }
 
     private Key getSigningKey() {
@@ -31,62 +38,86 @@ public class JwtTokenProvider {
 
     public String generateAccessToken(Long userId) {
         Date now = new Date();
-        Date expiryDate = new Date(now.getTime() + accessTokenExpiration);
+        Date expiryDate = new Date(now.getTime() + accessTokenExpiration * 1000);
 
         return Jwts.builder()
                 .setSubject(userId.toString())
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
+                .claim("role", Role.USER.name())
                 .signWith(getSigningKey(), SignatureAlgorithm.HS512)
                 .compact();
     }
 
-    public String generateRefreshToken(Long userId) {
+    public String generateOnboardingAccessToken(String id) {
         Date now = new Date();
-        Date expiryDate = new Date(now.getTime() + refreshTokenExpiration);
+        Date expiryDate = new Date(now.getTime() + onboardingAccessTokenExpiration * 1000);
 
         return Jwts.builder()
-                .setSubject(userId.toString())
+                .setSubject(id)
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
+                .claim("role", Role.ONBOARDING.name())
                 .signWith(getSigningKey(), SignatureAlgorithm.HS512)
                 .compact();
     }
 
-    public Long getUserIdFromToken(String token) {
+    public Role getRoleFromToken(String token) {
         Claims claims = Jwts.parserBuilder()
                 .setSigningKey(getSigningKey())
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
 
-        return Long.parseLong(claims.getSubject());
+        String roleName = claims.get("role", String.class);
+        return Role.valueOf(roleName);
     }
 
-    public AuthErrorCode validateToken(String token) {
+
+    public String generateRefreshToken(Long userId) {
+        Date now = new Date();
+        Date expiryDate = new Date(now.getTime() + refreshTokenExpiration * 1000);
+
+        return Jwts.builder()
+                .setSubject(userId.toString())
+                .setIssuedAt(now)
+                .setExpiration(expiryDate)
+                .signWith(getSigningKey(), SignatureAlgorithm.HS512)
+                .compact();
+    }
+
+    public String getSubjectFromToken(String token) {
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(getSigningKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+
+        return claims.getSubject();
+    }
+
+    public Date getExpirationFromToken(String token) {
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(getSigningKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+
+        return claims.getExpiration();
+    }
+
+    public AuthErrorCode getTokenValidateCode(String token) {
         try {
             Jwts.parserBuilder().setSigningKey(getSigningKey()).build().parseClaimsJws(token);
             return AuthErrorCode.SUCCESS;
         } catch (MalformedJwtException ex) {
-            log.error("Invalid JWT token");
             return AuthErrorCode.INVALID_INPUT_VALUE;
         } catch (ExpiredJwtException ex) {
-            log.error("Expired JWT token");
             return AuthErrorCode.TOKEN_EXPIRED;
         } catch (UnsupportedJwtException ex) {
-            log.error("Unsupported JWT token");
             return AuthErrorCode.UNSUPPORTED_TOKEN;
         } catch (IllegalArgumentException ex) {
-            log.error("JWT claims string is empty");
             return AuthErrorCode.EMPTY_JWT_CLAIMS;
         }
-    }
-
-    public long getRefreshTokenExpirationMillis() {
-        return refreshTokenExpiration;
-    }
-
-    public long getAccessTokenExpirationMillis() {
-        return accessTokenExpiration;
     }
 }
