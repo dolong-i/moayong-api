@@ -1,4 +1,4 @@
-package com.moayong.api.domain.auth.security;
+package com.moayong.api.domain.auth.config;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -13,4 +13,5 @@ public class JwtProperties {
     private String secret;
     private long accessTokenExpiration;
     private long refreshTokenExpiration;
+    private long onboardingAccessTokenExpiration;
 }
