@@ -1,12 +1,13 @@
 package com.moayong.api.domain.auth.oauth2.service;
 
+import com.moayong.api.domain.auth.config.UserPrincipal;
+import com.moayong.api.domain.auth.domain.UserTemporary;
 import com.moayong.api.domain.auth.enums.AuthProvider;
-import com.moayong.api.domain.auth.enums.Role;
 import com.moayong.api.domain.auth.oauth2.userinfo.OAuth2UserInfo;
 import com.moayong.api.domain.auth.oauth2.userinfo.OAuth2UserInfoFactory;
+import com.moayong.api.domain.auth.service.AuthService;
 import com.moayong.api.domain.user.domain.User;
-import com.moayong.api.domain.auth.security.UserPrincipal;
-import com.moayong.api.domain.user.repository.UserRepository;
+import com.moayong.api.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -17,8 +18,8 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
-
-    private final UserRepository userRepository;
+    private final UserService userService;
+    private final AuthService authService;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -35,20 +36,16 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         OAuth2UserInfo userInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(
                 authProvider, oAuth2User.getAttributes());
 
-        // 기존 사용자 확인 또는 신규 등록
-        User user = userRepository.findByProviderIdAndProvider(userInfo.getProviderId(), userInfo.getProvider())
-                .orElseGet(() -> registerNewUser(userInfo));
+        // 기존 사용자 확인
+        User user = userService.findByProviderAndProviderIdOptional(userInfo.getProvider(), userInfo.getProviderId())
+                .orElse(null);
+
+        // 없으면 온보딩내 저장 권한 제한
+        if (user == null) {
+            UserTemporary userTemporary = authService.saveUserTemporary(userInfo);
+            return new UserPrincipal(userTemporary, userInfo.getAttributes());
+        }
 
         return new UserPrincipal(user, userInfo.getAttributes());
-    }
-
-    private User registerNewUser(OAuth2UserInfo userInfo) {
-        User user = User.builder()
-                .provider(userInfo.getProvider())
-                .providerId(userInfo.getProviderId())
-                .role(Role.USER)
-                .build();
-
-        return userRepository.save(user);
     }
 }

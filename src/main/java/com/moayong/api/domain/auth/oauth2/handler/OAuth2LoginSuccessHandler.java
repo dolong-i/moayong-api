@@ -1,7 +1,9 @@
 package com.moayong.api.domain.auth.oauth2.handler;
 
-import com.moayong.api.domain.auth.security.UserPrincipal;
+import com.moayong.api.domain.auth.config.UserPrincipal;
+import com.moayong.api.domain.auth.enums.Role;
 import com.moayong.api.domain.auth.jwt.JwtTokenService;
+import com.moayong.api.global.util.CookieUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -16,8 +18,7 @@ import java.io.IOException;
 @Component
 @RequiredArgsConstructor
 public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
-
-    private final JwtTokenService jwtTokenService;
+    private final JwtTokenService tokenService;
 
     @Value("${app.oauth2.redirect-uri}")
     private String redirectUri;
@@ -39,16 +40,22 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
     protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-        Long userId = userPrincipal.getUserId();
+        Role role = userPrincipal.getRole();
 
-        // 토큰 생성
-        String accessToken = jwtTokenService.generateAccessToken(userId);
-        String refreshToken = jwtTokenService.generateRefreshToken(userId);
+        if (role.equals(Role.ONBOARDING)) {
+            String accessToken = tokenService.generateOnboardingAccessToken(userPrincipal.getUserId());
+            CookieUtil.addCookie(response, "accessToken", accessToken, (int) (tokenService.getOnboardingAccessTokenExpiration()));
+
+        } else {
+            String accessToken = tokenService.generateAccessToken(Long.valueOf(userPrincipal.getUserId()));
+            String refreshToken = tokenService.generateRefreshToken(Long.valueOf(userPrincipal.getUserId()));
+
+            CookieUtil.addCookie(response, "accessToken", accessToken, (int) (tokenService.getAccessTokenExpiration()));
+            CookieUtil.addCookie(response, "refreshToken", refreshToken, (int) (tokenService.getRefreshTokenExpiration()));
+        }
 
         // 프론트엔드로 리다이렉트 (토큰 포함)
         return UriComponentsBuilder.fromUriString(redirectUri)
-                .queryParam("accessToken", accessToken)
-                .queryParam("refreshToken", refreshToken)
                 .build().toUriString();
     }
 }
