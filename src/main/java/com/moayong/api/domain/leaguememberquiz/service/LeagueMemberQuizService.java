@@ -34,7 +34,8 @@ public class LeagueMemberQuizService {
             solvedQuizIds = List.of();
         }
 
-        // 안 푼 퀴즈들 가져오기
+        // TODO 문제를 다 풀었는지 여부를 저장할 예정
+        // 지금 findUnsolvedQuizzes가 비었으면 quizzes = quizService.findAllQuizzes();
         List<Quiz> quizzes = leagueMemberQuizRepository.findUnsolvedQuizzes(solvedQuizIds);
         if (quizzes.isEmpty()) {
             quizzes = quizService.findAllQuizzes();
@@ -57,7 +58,7 @@ public class LeagueMemberQuizService {
         return leagueMemberQuizRepository.findSolvedQuizzesByUserAndSeason(userId, seasonId);
     }
 
-    public Quiz processSubmittedAnswerAndReturnQuiz(Long userId, Long quizId, Integer userAnswer) {
+    public Quiz processSubmittedAnswer(Long userId, Long quizId, Integer userAnswer) {
         boolean isRightAnswer = checkAnswer(quizId, userAnswer);
 
         // TODO 리그멤버서비스 생성. leagueMemberService.getLeagueMemberIdByUserId(userId);
@@ -73,7 +74,7 @@ public class LeagueMemberQuizService {
         );
 
         /**
-         * TODO Redis 처리
+         * TODO Redis 처리 - total_score
          */
 
         return quizService.findById(quizId);
