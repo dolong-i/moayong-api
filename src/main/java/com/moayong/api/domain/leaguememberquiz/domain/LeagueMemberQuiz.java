@@ -35,10 +35,10 @@ public class LeagueMemberQuiz extends BaseEntity {
     private Integer score;
 
     @Builder
-    public LeagueMemberQuiz(Long leagueMemberId, Long quizId, LeagueMemberQuizStatus status, Integer score) {
+    public LeagueMemberQuiz(Long leagueMemberId, Long quizId, LeagueMemberQuizStatus status) {
         this.leagueMemberId = leagueMemberId;
         this.quizId = quizId;
         this.status = status;
-        this.score = score;
+        this.score = status.getScore();
     }
 }
