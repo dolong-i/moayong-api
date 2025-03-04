@@ -1,6 +1,6 @@
 package com.moayong.api.domain.leaguememberquiz.controller;
 
-import com.moayong.api.domain.leaguememberquiz.dto.request.UserAnswerRequest;
+import com.moayong.api.domain.leaguememberquiz.dto.request.AnswerRequest;
 import com.moayong.api.domain.leaguememberquiz.dto.response.QuizSubmissionResponse;
 import com.moayong.api.domain.leaguememberquiz.service.LeagueMemberQuizService;
 import com.moayong.api.domain.quiz.domain.Quiz;
@@ -27,16 +27,16 @@ public class LeagueMemberQuizController {
     }
 
     @PostMapping("/users/{userId}/financial-quizzes/{quizId}/solve")
-    public ApiResponse<QuizSubmissionResponse> submitQuiz(@PathVariable("userId") Long userId, @PathVariable("quizId") Long quizId, @RequestBody @Valid UserAnswerRequest request) {
+    public ApiResponse<QuizSubmissionResponse> submitQuiz(@PathVariable("userId") Long userId, @PathVariable("quizId") Long quizId, @RequestBody @Valid AnswerRequest request) {
         Integer userAnswer = request.answer();
-        Quiz quiz = leagueMemberQuizService.processSubmittedAnswerAndReturnQuiz(userId, quizId, userAnswer);
+        Quiz quiz = leagueMemberQuizService.processSubmittedAnswer(userId, quizId, userAnswer);
 
         QuizSubmissionResponse response = new QuizSubmissionResponse(userAnswer, quiz);
         return ApiResponse.success(response, "퀴즈 제출 성공");
     }
 
     @GetMapping("/users/{userId}/seasons/{seasonId}/financial-quizzes")
-    public ApiResponse<List<QuizResponse>> findAllSolvedQuizzesInThisSeason(@PathVariable("userId") Long userId, @PathVariable("seasonId") Long seasonId) {
+    public ApiResponse<List<QuizResponse>> findAllSolvedQuizzesBySeasonId(@PathVariable("userId") Long userId, @PathVariable("seasonId") Long seasonId) {
         List<Quiz> quizzes = leagueMemberQuizService.findSolvedQuizzesByUserAndSeason(userId, seasonId);
         List<QuizResponse> response = quizzes.stream().map(QuizResponse::new).toList();
         return ApiResponse.success(response, "현재 시즌동안 완료한 퀴즈 조회 성공");

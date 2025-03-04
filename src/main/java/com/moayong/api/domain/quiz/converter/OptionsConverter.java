@@ -19,16 +19,16 @@ public class OptionsConverter implements AttributeConverter<List<String>, String
         try {
             return objectMapper.writeValueAsString(attribute);
         } catch (JsonProcessingException e) {
-            throw new QuizException(QuizErrorCode.QUIZ_OPTIONS_CONVERTING_ERROR, e.getMessage());
+            throw new QuizException(QuizErrorCode.QUIZ_OPTIONS_CONVERTING_ERROR);
         }
     }
 
     @Override
     public List<String> convertToEntityAttribute(String dbData) {
         try {
-            return objectMapper.readValue(dbData, new TypeReference<List<String>>() {});
+            return objectMapper.readValue(dbData, new TypeReference<>() {});
         } catch (JsonProcessingException e) {
-            throw new QuizException(QuizErrorCode.QUIZ_OPTIONS_CONVERTING_ERROR, e.getMessage());
+            throw new QuizException(QuizErrorCode.QUIZ_OPTIONS_CONVERTING_ERROR);
         }
     }
 }
