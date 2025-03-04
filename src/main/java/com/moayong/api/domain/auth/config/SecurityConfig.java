@@ -1,7 +1,8 @@
-package com.moayong.api.domain.auth.security;
+package com.moayong.api.domain.auth.config;
 
-import com.moayong.api.domain.auth.jwt.JwtExceptionFilter;
+import com.moayong.api.domain.auth.enums.Role;
 import com.moayong.api.domain.auth.jwt.JwtAuthenticationFilter;
+import com.moayong.api.domain.auth.jwt.JwtExceptionFilter;
 import com.moayong.api.domain.auth.oauth2.handler.OAuth2LoginFailureHandler;
 import com.moayong.api.domain.auth.oauth2.handler.OAuth2LoginSuccessHandler;
 import com.moayong.api.domain.auth.oauth2.service.CustomOAuth2UserService;
@@ -36,13 +37,14 @@ public class SecurityConfig {
                 .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/oauth2/authorize", "/login/oauth2/code/*").permitAll()
-                        .requestMatchers("/api/v1/auth/**").permitAll()
+                        .requestMatchers("/api/v1/auth/authorize", "/login/oauth2/code/*").permitAll()
+                        .requestMatchers("/api/v1/auth/onboarding/complete").hasRole(Role.ONBOARDING.name())
+                        .requestMatchers("/api/v1/auth/refresh").permitAll()
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth2 -> oauth2
                         .authorizationEndpoint(endpoint -> endpoint
-                                .baseUri("/oauth2/authorize"))
+                                .baseUri("/api/v1/auth/authorize"))
                         .redirectionEndpoint(endpoint -> endpoint
                                 .baseUri("/login/oauth2/code/*"))
                         .userInfoEndpoint(endpoint -> endpoint
