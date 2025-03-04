@@ -1,6 +1,6 @@
 package com.moayong.api.domain.quiz.domain;
 
-import com.moayong.api.domain.quiz.converter.StringListConverter;
+import com.moayong.api.domain.quiz.converter.OptionsConverter;
 import com.moayong.api.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -30,7 +30,7 @@ public class Quiz extends BaseEntity {
     private String description;
 
     @Column(name = "options", nullable = false)
-    @Convert(converter = StringListConverter.class)
+    @Convert(converter = OptionsConverter.class)
     public List<String> options;
 
     @Column(name = "answer_number", nullable = false)
