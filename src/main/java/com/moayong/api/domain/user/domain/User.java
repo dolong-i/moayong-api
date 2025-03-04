@@ -1,11 +1,16 @@
 package com.moayong.api.domain.user.domain;
 
+import com.moayong.api.domain.auth.domain.UserTemporary;
+import com.moayong.api.domain.auth.dto.service.OnboardingServiceDto;
 import com.moayong.api.domain.auth.enums.AuthProvider;
 import com.moayong.api.domain.auth.enums.Role;
 import com.moayong.api.domain.user.enums.SavingsBank;
 import com.moayong.api.global.entity.BaseEntity;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 
@@ -13,11 +18,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "user", uniqueConstraints = {
-        @UniqueConstraint(name = "UK_provider_providerId", columnNames = {"provider", "provider_id"})
-})
 public class User extends BaseEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false)
@@ -40,6 +41,9 @@ public class User extends BaseEntity {
     @Column(name = "nickname")
     private String nickname;
 
+    @Column(name = "email")
+    private String email;
+
     @Column(name = "monthly_salary")
     private Integer monthlySalary;
 
@@ -53,15 +57,14 @@ public class User extends BaseEntity {
     @Column(name = "account_number")
     private String accountNumber;
 
-    private boolean onboardingCompleted = false; // 온보딩 완료 여부
-
 
     @Builder
-    public User(AuthProvider provider, String providerId, Role role, String name, String nickname,
+    public User(AuthProvider provider, String providerId, Role role, String email, String name, String nickname,
                 Integer monthlySalary, Integer savingsRate, SavingsBank savingsBank, String accountNumber) {
         this.provider = provider;
         this.providerId = providerId;
         this.role = role;
+        this.email = email;
         this.name = name;
         this.nickname = nickname;
         this.monthlySalary = monthlySalary;
@@ -70,15 +73,17 @@ public class User extends BaseEntity {
         this.accountNumber = accountNumber;
     }
 
-    public void completeOnboarding(String name, String nickname, Integer monthlySalary, Integer savingsRate,
-                                   SavingsBank savingsBank, String accountNumber) {
-        this.name = name;
-        this.nickname = nickname;
-        this.monthlySalary = monthlySalary;
-        this.savingsRate = savingsRate;
-        this.savingsBank = savingsBank;
-        this.accountNumber = accountNumber;
-        this.onboardingCompleted = true;
+    public User(UserTemporary userTemporary, OnboardingServiceDto onboardingServiceDto) {
+        this.provider = userTemporary.getProvider();
+        this.providerId = userTemporary.getProviderId();
+        this.role = userTemporary.getRole();
+        this.email = userTemporary.getEmail();
+        this.name = onboardingServiceDto.name();
+        this.nickname = onboardingServiceDto.nickname();
+        this.monthlySalary = onboardingServiceDto.monthlySalary();
+        this.savingsRate = onboardingServiceDto.savingsRate();
+        this.savingsBank = onboardingServiceDto.savingsBank();
+        this.accountNumber = onboardingServiceDto.accountNumber();
     }
 
     public void upgradeToAdmin() {
