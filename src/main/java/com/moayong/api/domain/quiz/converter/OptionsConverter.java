@@ -3,13 +3,15 @@ package com.moayong.api.domain.quiz.converter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.moayong.api.domain.quiz.enums.QuizErrorCode;
+import com.moayong.api.domain.quiz.exception.QuizException;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 
 import java.util.List;
 
 @Converter
-public class StringListConverter implements AttributeConverter<List<String>, String> {
+public class OptionsConverter implements AttributeConverter<List<String>, String> {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
@@ -17,7 +19,7 @@ public class StringListConverter implements AttributeConverter<List<String>, Str
         try {
             return objectMapper.writeValueAsString(attribute);
         } catch (JsonProcessingException e) {
-            throw new RuntimeException("Error converting List to JSON", e);
+            throw new QuizException(QuizErrorCode.QUIZ_OPTIONS_CONVERTING_ERROR, e.getMessage());
         }
     }
 
@@ -26,7 +28,7 @@ public class StringListConverter implements AttributeConverter<List<String>, Str
         try {
             return objectMapper.readValue(dbData, new TypeReference<List<String>>() {});
         } catch (JsonProcessingException e) {
-            throw new RuntimeException("Error converting JSON to List", e);
+            throw new QuizException(QuizErrorCode.QUIZ_OPTIONS_CONVERTING_ERROR, e.getMessage());
         }
     }
 }

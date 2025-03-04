@@ -1,6 +1,5 @@
 package com.moayong.api.domain.quiz.service;
 
-import com.moayong.api.domain.league.service.LeagueService;
 import com.moayong.api.domain.quiz.domain.Quiz;
 import com.moayong.api.domain.quiz.enums.QuizErrorCode;
 import com.moayong.api.domain.quiz.exception.QuizException;
@@ -21,21 +20,6 @@ public class QuizService {
         return quizRepository.save(quiz);
     }
 
-    public Quiz getRandomQuiz(Long userId) {
-        return quizRepository.findRandomQuiz(userId)
-                .orElseThrow(() -> {
-                    Map<String, Object> errorData = new HashMap<>();
-                    errorData.put("id", userId);
-                    return new QuizException(QuizErrorCode.QUIZ_NOT_FOUND, errorData);
-                });
-    }
-
-    public List<Quiz> findAllSolvedQuizzes(Long userId) {
-        // 리그 가져오기
-
-        return null;
-    }
-
     public Quiz findById(Long id) {
         return quizRepository.findById(id)
                 .orElseThrow(() -> {
@@ -45,4 +29,7 @@ public class QuizService {
                 });
     }
 
+    public List<Quiz> findAllQuizzes() {
+        return quizRepository.findAll();
+    }
 }
