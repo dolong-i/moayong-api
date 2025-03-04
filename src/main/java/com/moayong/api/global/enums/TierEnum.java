@@ -1,6 +1,7 @@
 package com.moayong.api.global.enums;
 
 import lombok.Getter;
+
 import java.util.Arrays;
 
 @Getter
@@ -31,14 +32,14 @@ public enum TierEnum {
     }
 
     public TierEnum getNextTier() {
-        if (this.id == FIRST) {
+        if (this.id == LAST) {
             return fromLevel(this.id);
         }
         return fromLevel(this.id + 1);
     }
 
     public TierEnum getPrevTier() {
-        if (this.id == LAST) {
+        if (this.id == FIRST) {
             return fromLevel(this.id);
         }
         return fromLevel(this.id - 1);
