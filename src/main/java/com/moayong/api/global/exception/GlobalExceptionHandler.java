@@ -1,16 +1,16 @@
 package com.moayong.api.global.exception;
 
 import com.moayong.api.global.api.ApiResponse;
+import jakarta.validation.UnexpectedTypeException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -21,7 +21,8 @@ public class GlobalExceptionHandler {
     // 공통 예외 처리
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiResponse<?>> handleValidationException(MethodArgumentNotValidException ex) {
-        log.info("Validation exception: {}", ex.getMessage(), ex);
+        log.info("Validation exception: {}", ex.getMessage());
+        log.info(ex.getBindingResult().getFieldErrors().toString());
 
         Map<String, Object> errorData = ex.getBindingResult().getFieldErrors()
                 .stream()
@@ -33,10 +34,10 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ApiResponse<?>> handleIllegalArgumentException(IllegalArgumentException ex) {
-        log.info("Illegal argument exception: {}", ex.getMessage(), ex);
+        log.info("Illegal argument exception: {}", ex.getMessage());
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(ApiResponse.error(String.valueOf(HttpStatus.BAD_REQUEST), "잘못된 요청입니다."));
+                .body(ApiResponse.error(String.valueOf(HttpStatus.BAD_REQUEST.value()), "잘못된 요청입니다."));
     }
 
     @ExceptionHandler(RuntimeException.class)
@@ -44,7 +45,26 @@ public class GlobalExceptionHandler {
         log.error("Runtime exception: {}", ex.getMessage(), ex);
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(ApiResponse.error(String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR), "서버 오류입니다."));
+                .body(ApiResponse.error(String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()), "서버 오류입니다."));
+    }
+
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<ApiResponse<?>> handleNotFound(NoResourceFoundException ex) {
+        log.info("handleNot found: {}", ex.getMessage(), ex);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(ApiResponse.error(String.valueOf(HttpStatus.NOT_FOUND.value()), "존재하지 않는 경로입니다."));
+    }
+
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public ResponseEntity<ApiResponse<?>> handleNotFound(HttpRequestMethodNotSupportedException ex) {
+        return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED)
+                .body(ApiResponse.error(String.valueOf(HttpStatus.METHOD_NOT_ALLOWED.value()), "허용되지 않은 HTTP 메서드입니다."));
+    }
+
+    @ExceptionHandler(UnexpectedTypeException.class)
+    public ResponseEntity<ApiResponse<?>> handleUnexpectedTypeException(UnexpectedTypeException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(ApiResponse.error("INVALID_INPUT_TYPE", ex.getMessage()));
     }
 
     // 도메인별 세부 예외 처리
