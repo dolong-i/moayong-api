@@ -20,7 +20,7 @@ public enum AuthProvider {
         }
 
         Map<String, Object> errorData = new HashMap<>();
-        errorData.put("auth_provider", value);
+        errorData.put("authProvider", value);
 
         throw new AuthException(AuthErrorCode.INVALID_INPUT_VALUE, errorData);
     }

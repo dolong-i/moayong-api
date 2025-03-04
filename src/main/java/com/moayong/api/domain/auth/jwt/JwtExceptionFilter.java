@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.io.IOException;
 
@@ -32,13 +33,21 @@ public class JwtExceptionFilter extends OncePerRequestFilter {
             if (e.getErrorData() != null && !e.getErrorData().isEmpty()) {
                 logMessage += ", data: " + e.getErrorData();
             }
-            log.info(logMessage, e);
+            log.info(logMessage);
 
             response.setStatus(e.getStatus().value());
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             response.setCharacterEncoding("UTF-8");
 
-            ApiResponse<Object> apiResponse = ApiResponse.error("AUTH_" + e.getCode(), e.getErrorData(), e.getMessage());
+            ApiResponse<Object> apiResponse = ApiResponse.error(e.getCode(), e.getErrorData(), e.getMessage());
+
+            objectMapper.writeValue(response.getOutputStream(), apiResponse);
+        } catch (NoHandlerFoundException e) {
+            response.setStatus(HttpStatus.NOT_FOUND.value());
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            response.setCharacterEncoding("UTF-8");
+
+            ApiResponse<Object> apiResponse = ApiResponse.error(String.valueOf(HttpStatus.NOT_FOUND), e.getMessage());
 
             objectMapper.writeValue(response.getOutputStream(), apiResponse);
         } catch (Exception e) {
