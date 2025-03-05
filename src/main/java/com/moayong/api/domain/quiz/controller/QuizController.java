@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.*;
 public class QuizController {
     private final QuizService quizService;
 
-    @GetMapping("/financial-quizzes/{id}")
-    public ApiResponse<QuizResponse> getQuizByQuizId(@PathVariable("id") Long id) {
+    @GetMapping("/quizzes/{id}")
+    public ApiResponse<QuizResponse> findByQuizId(@PathVariable("id") Long id) {
         Quiz quiz = quizService.findById(id);
         QuizResponse quizResponse = new QuizResponse(quiz);
 
