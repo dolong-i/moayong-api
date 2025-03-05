@@ -1,4 +1,4 @@
-package com.moayong.api.domain.leaguememberquiz.dto.response;
+package com.moayong.api.domain.memberQuiz.dto.response;
 
 import com.moayong.api.domain.quiz.domain.Quiz;
 

@@ -1,8 +1,8 @@
-package com.moayong.api.domain.leaguememberquiz.service;
+package com.moayong.api.domain.memberQuiz.service;
 
-import com.moayong.api.domain.leaguememberquiz.domain.LeagueMemberQuiz;
-import com.moayong.api.domain.leaguememberquiz.enums.LeagueMemberQuizStatus;
-import com.moayong.api.domain.leaguememberquiz.repository.LeagueMemberQuizRepository;
+import com.moayong.api.domain.memberQuiz.domain.MemberQuiz;
+import com.moayong.api.domain.memberQuiz.enums.MemberQuizStatus;
+import com.moayong.api.domain.memberQuiz.repository.MemberQuizRepository;
 import com.moayong.api.domain.quiz.domain.Quiz;
 import com.moayong.api.domain.quiz.enums.QuizErrorCode;
 import com.moayong.api.domain.quiz.exception.QuizException;
@@ -17,26 +17,22 @@ import java.util.concurrent.ThreadLocalRandom;
 
 @RequiredArgsConstructor
 @Service
-public class LeagueMemberQuizService {
-    private final LeagueMemberQuizRepository leagueMemberQuizRepository;
+public class MemberQuizService {
+    private final MemberQuizRepository memberQuizRepository;
     private final QuizService quizService;
 
-    public LeagueMemberQuiz save(LeagueMemberQuiz leagueMemberQuiz) {
-        return leagueMemberQuizRepository.save(leagueMemberQuiz);
+    public MemberQuiz save(MemberQuiz memberQuiz) {
+        return memberQuizRepository.save(memberQuiz);
     }
 
     // TODO 하루 5개 제한 추가하기 - 다 풀었으면 지난 퀴즈 목록 제공
     // TODO 매일 오전 9시 공개, 퀴즈 풀기 전까지 24시간 동안 동일 퀴즈 확인해야함
-    public Quiz getRandomQuiz(Long userId) {
+    public Quiz findRandomQuiz(Long userId) {
         // 푼 퀴즈 아이디들 가져오기
-        List<Long> solvedQuizIds = leagueMemberQuizRepository.findSolvedQuizIds(userId);
-        if (solvedQuizIds == null) {
-            solvedQuizIds = List.of();
-        }
+        List<Long> solvedQuizIds = memberQuizRepository.findSolvedQuizIds(userId);
 
         // TODO 문제를 다 풀었는지 여부를 저장할 예정
-        // 지금 findUnsolvedQuizzes가 비었으면 quizzes = quizService.findAllQuizzes();
-        List<Quiz> quizzes = leagueMemberQuizRepository.findUnsolvedQuizzes(solvedQuizIds);
+        List<Quiz> quizzes = memberQuizRepository.findUnsolvedQuizzes(solvedQuizIds);
         if (quizzes.isEmpty()) {
             quizzes = quizService.findAllQuizzes();
             if (quizzes.isEmpty()) {
@@ -51,22 +47,22 @@ public class LeagueMemberQuizService {
     }
 
     public List<Quiz> findAllSolvedQuizzes(Long userId) {
-        return leagueMemberQuizRepository.findAllSolvedQuizzes(userId);
+        return memberQuizRepository.findAllSolvedQuizzes(userId);
     }
 
     public List<Quiz> findSolvedQuizzesByUserAndSeason(Long userId, Long seasonId) {
-        return leagueMemberQuizRepository.findSolvedQuizzesByUserAndSeason(userId, seasonId);
+        return memberQuizRepository.findSolvedQuizzesByUserAndSeason(userId, seasonId);
     }
 
-    public Quiz processSubmittedAnswer(Long userId, Long quizId, Integer userAnswer) {
+    public Quiz submitAnswer(Long userId, Long quizId, Integer userAnswer) {
         boolean isRightAnswer = checkAnswer(quizId, userAnswer);
 
-        // TODO 리그멤버서비스 생성. leagueMemberService.getLeagueMemberIdByUserId(userId);
+        // TODO 리그멤버서비스 생성. leagueMemberService.findLeagueMemberIdByUserId(userId);
         Long leagueMemberId = 0L;
 
-        LeagueMemberQuizStatus status = isRightAnswer ? LeagueMemberQuizStatus.SUCCESS : LeagueMemberQuizStatus.FAIL;
-        LeagueMemberQuiz leagueMemberQuiz = leagueMemberQuizRepository.save(
-                LeagueMemberQuiz.builder()
+        MemberQuizStatus status = isRightAnswer ? MemberQuizStatus.SUCCESS : MemberQuizStatus.FAIL;
+        MemberQuiz memberQuiz = memberQuizRepository.save(
+                MemberQuiz.builder()
                         .leagueMemberId(leagueMemberId)
                         .quizId(quizId)
                         .status(status)

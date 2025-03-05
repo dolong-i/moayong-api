@@ -1,8 +1,8 @@
-package com.moayong.api.domain.leaguememberquiz.repository;
+package com.moayong.api.domain.memberQuiz.repository;
 
 import com.moayong.api.domain.league.domain.QLeague;
 import com.moayong.api.domain.leaguemember.domain.QLeagueMember;
-import com.moayong.api.domain.leaguememberquiz.domain.QLeagueMemberQuiz;
+import com.moayong.api.domain.memberQuiz.domain.QMemberQuiz;
 import com.moayong.api.domain.quiz.domain.QQuiz;
 import com.moayong.api.domain.quiz.domain.Quiz;
 import com.moayong.api.domain.season.domain.QSeason;
@@ -15,7 +15,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Repository
-public class LeagueMemberQuizRepositoryCustomImpl implements LeagueMemberQuizRepositoryCustom {
+public class MemberQuizRepositoryCustomImpl implements MemberQuizRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
     @Override
@@ -41,15 +41,15 @@ public class LeagueMemberQuizRepositoryCustomImpl implements LeagueMemberQuizRep
     @Override
     public List<Quiz> findSolvedQuizzesByUserAndSeason(Long userId, Long seasonId) {
         QQuiz qQuiz = QQuiz.quiz;
-        QLeagueMemberQuiz qLeagueMemberQuiz = QLeagueMemberQuiz.leagueMemberQuiz;
+        QMemberQuiz qMemberQuiz = QMemberQuiz.memberQuiz;
         QLeagueMember qLeagueMember = QLeagueMember.leagueMember;
         QLeague qLeague = QLeague.league;
         QSeason qSeason = QSeason.season;
 
         return queryFactory.select(qQuiz)
                 .from(qQuiz)
-                .join(qLeagueMemberQuiz).on(qQuiz.id.eq(qLeagueMemberQuiz.quizId))
-                .join(qLeagueMember).on(qLeagueMemberQuiz.leagueMemberId.eq(qLeagueMember.id))
+                .join(qMemberQuiz).on(qQuiz.id.eq(qMemberQuiz.quizId))
+                .join(qLeagueMember).on(qMemberQuiz.leagueMemberId.eq(qLeagueMember.id))
                 .join(qLeague).on(qLeagueMember.leagueId.eq(qLeague.id))
                 .join(qSeason).on(qLeague.season.id.eq(qSeason.id))
                 .where(qLeagueMember.userId.eq(userId)
@@ -59,12 +59,12 @@ public class LeagueMemberQuizRepositoryCustomImpl implements LeagueMemberQuizRep
 
     @Override
     public List<Long> findSolvedQuizIds(Long userId) {
-        QLeagueMemberQuiz qLeagueMemberQuiz = QLeagueMemberQuiz.leagueMemberQuiz;
+        QMemberQuiz qMemberQuiz = QMemberQuiz.memberQuiz;
         QLeagueMember qLeagueMember = QLeagueMember.leagueMember;
 
-        return queryFactory.select(qLeagueMemberQuiz.quizId)
-                .from(qLeagueMemberQuiz)
-                .where(qLeagueMemberQuiz.leagueMemberId.in(
+        return queryFactory.select(qMemberQuiz.quizId)
+                .from(qMemberQuiz)
+                .where(qMemberQuiz.leagueMemberId.in(
                         JPAExpressions.select(qLeagueMember.id)
                                 .from(qLeagueMember)
                                 .where(qLeagueMember.userId.eq(userId))
