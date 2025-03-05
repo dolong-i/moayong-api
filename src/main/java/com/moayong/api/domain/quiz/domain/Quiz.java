@@ -3,10 +3,7 @@ package com.moayong.api.domain.quiz.domain;
 import com.moayong.api.domain.quiz.converter.OptionsConverter;
 import com.moayong.api.global.entity.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.List;
@@ -15,7 +12,6 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "financial_quiz")
 public class Quiz extends BaseEntity {
 
     @Id
