@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -20,7 +21,11 @@ public class QuizService {
         return quizRepository.save(quiz);
     }
 
-    public Quiz findById(Long id) {
+    public void deleteAll() {
+        quizRepository.deleteAll();
+    }
+
+    public Quiz findQuizById(Long id) {
         return quizRepository.findById(id)
                 .orElseThrow(() -> {
                     Map<String, Object> errorData = new HashMap<>();
@@ -29,7 +34,27 @@ public class QuizService {
                 });
     }
 
+    public Optional<Quiz> findQuizByIdOptional(Long id) {
+        return quizRepository.findById(id);
+    }
+
+    public List<Quiz> findAllQuizzesById(List<Long> ids) {
+        return quizRepository.findAllById(ids);
+    }
+
+    public List<Quiz> findAllQuizzesByIdNotIn(List<Long> ids) {
+        if (ids.isEmpty()) {
+            return quizRepository.findAll();
+        }
+
+        return quizRepository.findAllByIdNotIn(ids);
+    }
+
     public List<Quiz> findAllQuizzes() {
         return quizRepository.findAll();
+    }
+
+    public long countAllQuizzes() {
+        return quizRepository.count();
     }
 }

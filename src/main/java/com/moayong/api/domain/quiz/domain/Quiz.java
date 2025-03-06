@@ -19,6 +19,12 @@ public class Quiz extends BaseEntity {
     @Column(name = "id", updatable = false)
     private Long id;
 
+    @Column(name = "finance_topic", nullable = false)
+    private String financeTopic;
+
+    @Column(name = "finance_info", nullable = false)
+    private String financeInfo;
+
     @Column(name = "title", nullable = false)
     private String title;
 
@@ -32,19 +38,13 @@ public class Quiz extends BaseEntity {
     @Column(name = "answer_number", nullable = false)
     private Integer answerNumber;
 
-    @Column(name = "answer_title", nullable = false)
-    private String answerTitle;
-
-    @Column(name = "answer_description", nullable = false)
-    private String answerDescription;
-
     @Builder
-    public Quiz(String title, String description, List<String> options, Integer answerNumber, String answerTitle, String answerDescription) {
+    public Quiz(String financeTopic, String financeInfo, String title, String description, List<String> options, Integer answerNumber) {
+        this.financeTopic = financeTopic;
+        this.financeInfo = financeInfo;
         this.title = title;
         this.description = description;
         this.options = options;
         this.answerNumber = answerNumber;
-        this.answerTitle = answerTitle;
-        this.answerDescription = answerDescription;
     }
 }
