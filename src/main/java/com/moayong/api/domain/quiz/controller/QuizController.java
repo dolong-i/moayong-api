@@ -15,9 +15,10 @@ public class QuizController {
 
     @GetMapping("/quizzes/{id}")
     public ApiResponse<QuizResponse> findByQuizId(@PathVariable("id") Long id) {
-        Quiz quiz = quizService.findById(id);
+        Quiz quiz = quizService.findQuizById(id);
         QuizResponse quizResponse = new QuizResponse(quiz);
 
         return ApiResponse.success(quizResponse, "퀴즈 단건 조회 성공");
     }
+
 }

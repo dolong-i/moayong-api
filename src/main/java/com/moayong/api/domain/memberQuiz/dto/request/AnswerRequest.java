@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotNull;
 public record AnswerRequest(
         @Min(1)
         @Max(3)
-        @NotNull(message = "답은 Null 일 수 없습니다")
+        @NotNull(message = "답은 Null 일 수 없습니다.")
         Integer answer
 ) {
 }

@@ -9,7 +9,7 @@ import java.util.Map;
 @Getter
 public class MemberQuizException extends DomainSpecificException {
     public MemberQuizException(MemberQuizErrorCode errorCode, String message, Map<String, Object> errorData) {
-        super("Quiz", errorCode.getStatus(), errorCode, message, errorData);
+        super("MemberQuiz", errorCode.getStatus(), errorCode, message, errorData);
     }
 
     public MemberQuizException(MemberQuizErrorCode errorCode) {
