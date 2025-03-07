@@ -1,8 +1,8 @@
-package com.moayong.api.domain.memberQuiz.repository;
+package com.moayong.api.domain.memberquiz.repository;
 
 import com.moayong.api.domain.league.domain.QLeague;
 import com.moayong.api.domain.leaguemember.domain.QLeagueMember;
-import com.moayong.api.domain.memberQuiz.domain.QMemberQuiz;
+import com.moayong.api.domain.memberquiz.domain.QMemberQuiz;
 import com.moayong.api.domain.quiz.domain.QQuiz;
 import com.moayong.api.domain.quiz.domain.Quiz;
 import com.moayong.api.domain.season.domain.QSeason;

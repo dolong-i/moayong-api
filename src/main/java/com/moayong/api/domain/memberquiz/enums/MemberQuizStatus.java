@@ -1,4 +1,4 @@
-package com.moayong.api.domain.memberQuiz.enums;
+package com.moayong.api.domain.memberquiz.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -6,8 +6,8 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum MemberQuizStatus {
-    SUCCESS(25),
-    FAIL(5);
+    CORRECT(25),
+    WRONG(5);
 
     private final Integer score;
 }

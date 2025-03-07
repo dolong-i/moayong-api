@@ -1,5 +1,6 @@
 package com.moayong.api.domain.quiz.domain;
 
+import com.moayong.api.domain.memberquiz.dto.redis.UserDailyQuiz;
 import com.moayong.api.domain.quiz.converter.OptionsConverter;
 import com.moayong.api.global.entity.BaseEntity;
 import jakarta.persistence.*;
@@ -12,6 +13,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString
 public class Quiz extends BaseEntity {
 
     @Id
@@ -19,32 +21,38 @@ public class Quiz extends BaseEntity {
     @Column(name = "id", updatable = false)
     private Long id;
 
-    @Column(name = "finance_topic", nullable = false)
-    private String financeTopic;
+    @Column(name = "finance_title", nullable = false)
+    private String financeTitle;
 
-    @Column(name = "finance_info", nullable = false)
-    private String financeInfo;
+    @Column(name = "finance_description", nullable = false)
+    private String financeDescription;
 
-    @Column(name = "title", nullable = false)
-    private String title;
+    @Column(name = "problem_title", nullable = false)
+    private String problemTitle;
 
-    @Column(name = "description", nullable = false)
-    private String description;
-
-    @Column(name = "options", nullable = false)
+    @Column(name = "problem_options", nullable = false)
     @Convert(converter = OptionsConverter.class)
-    public List<String> options;
+    public List<String> problemOptions;
 
     @Column(name = "answer_number", nullable = false)
     private Integer answerNumber;
 
+    @Column(name = "answer_description", nullable = false)
+    private String answerDescription;
+
     @Builder
-    public Quiz(String financeTopic, String financeInfo, String title, String description, List<String> options, Integer answerNumber) {
-        this.financeTopic = financeTopic;
-        this.financeInfo = financeInfo;
-        this.title = title;
-        this.description = description;
-        this.options = options;
+    public Quiz(String financeTitle, String financeDescription, String problemTitle, List<String> problemOptions, Integer answerNumber, String answerDescription) {
+        this.financeTitle = financeTitle;
+        this.financeDescription = financeDescription;
+        this.problemTitle = problemTitle;
+        this.problemOptions = problemOptions;
         this.answerNumber = answerNumber;
+        this.answerDescription = answerDescription;
+    }
+
+    public Quiz(UserDailyQuiz userDailyQuiz) {
+        this.id = userDailyQuiz.getQuizId();
+        this.financeTitle = userDailyQuiz.getFinanceTitle();
+        this.financeDescription = userDailyQuiz.getFinanceDescription();
     }
 }

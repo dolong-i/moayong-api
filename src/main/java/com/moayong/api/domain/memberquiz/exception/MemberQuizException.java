@@ -1,6 +1,6 @@
-package com.moayong.api.domain.memberQuiz.exception;
+package com.moayong.api.domain.memberquiz.exception;
 
-import com.moayong.api.domain.memberQuiz.enums.MemberQuizErrorCode;
+import com.moayong.api.domain.memberquiz.enums.MemberQuizErrorCode;
 import com.moayong.api.global.exception.DomainSpecificException;
 import lombok.Getter;
 
