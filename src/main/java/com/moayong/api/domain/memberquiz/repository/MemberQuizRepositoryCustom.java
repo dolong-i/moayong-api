@@ -1,11 +1,8 @@
-package com.moayong.api.domain.memberQuiz.repository;
+package com.moayong.api.domain.memberquiz.repository;
 
-import com.moayong.api.domain.memberQuiz.domain.MemberQuiz;
 import com.moayong.api.domain.quiz.domain.Quiz;
 
-import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 public interface MemberQuizRepositoryCustom {
 

@@ -29,7 +29,7 @@ public class QuizService {
         return quizRepository.findById(id)
                 .orElseThrow(() -> {
                     Map<String, Object> errorData = new HashMap<>();
-                    errorData.put("id", id);
+                    errorData.put("quizId", id);
                     return new QuizException(QuizErrorCode.QUIZ_NOT_FOUND, errorData);
                 });
     }

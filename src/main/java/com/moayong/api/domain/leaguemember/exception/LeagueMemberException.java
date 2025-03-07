@@ -1,9 +1,7 @@
 package com.moayong.api.domain.leaguemember.exception;
 
 import com.moayong.api.domain.leaguemember.enums.LeagueMemberErrorCode;
-import com.moayong.api.domain.memberQuiz.enums.MemberQuizErrorCode;
 import com.moayong.api.global.exception.DomainSpecificException;
-import org.springframework.http.HttpStatus;
 
 import java.util.Map;
 

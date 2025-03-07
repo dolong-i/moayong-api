@@ -1,6 +1,6 @@
-package com.moayong.api.domain.memberQuiz.domain;
+package com.moayong.api.domain.memberquiz.domain;
 
-import com.moayong.api.domain.memberQuiz.enums.MemberQuizStatus;
+import com.moayong.api.domain.memberquiz.enums.MemberQuizStatus;
 import com.moayong.api.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;

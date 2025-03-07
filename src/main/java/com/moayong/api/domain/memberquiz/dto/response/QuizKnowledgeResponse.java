@@ -1,13 +1,13 @@
-package com.moayong.api.domain.quiz.dto.response;
+package com.moayong.api.domain.memberquiz.dto.response;
 
 import com.moayong.api.domain.quiz.domain.Quiz;
 
-public record QuizResponse (
+public record QuizKnowledgeResponse(
         Long id,
         String financeTitle,
         String financeDescription
-){
-    public QuizResponse(Quiz quiz) {
+) {
+    public QuizKnowledgeResponse(Quiz quiz) {
         this(
                 quiz.getId(),
                 quiz.getFinanceTitle(),
@@ -15,4 +15,3 @@ public record QuizResponse (
         );
     }
 }
-
