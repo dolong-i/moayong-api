@@ -1,4 +1,4 @@
-package com.moayong.api.global.config;
+package com.moayong.api.global.config.property;
 
 import lombok.Getter;
 import lombok.Setter;
