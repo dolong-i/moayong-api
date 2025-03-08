@@ -22,7 +22,11 @@ public class SeasonService {
         return seasonRepository.save(season);
     }
 
-    public Optional<Season> findOpenSeason() {
+    public Season findOpenSeason() {
+        return seasonRepository.findOpenSeason().orElseThrow(() -> new SeasonException(SeasonErrorCode.CURRENT_SEASON_NOT_OPEN));
+    }
+
+    public Optional<Season> findOpenSeasonOptional() {
         return seasonRepository.findOpenSeason();
     }
 
@@ -32,11 +36,7 @@ public class SeasonService {
 
     public Season findSeasonById(Long id) {
         return seasonRepository.findById(id)
-                .orElseThrow(() -> {
-                    Map<String, Object> errorData = new HashMap<>();
-                    errorData.put("id", id);
-                    return new SeasonException(SeasonErrorCode.SEASON_NOT_FOUND, errorData);
-                });
+                .orElseThrow(() -> new SeasonException(SeasonErrorCode.SEASON_NOT_FOUND, Map.of("id", id)));
     }
 
     public void updateSeasonStatus(Long id, SeasonStatus status) {
