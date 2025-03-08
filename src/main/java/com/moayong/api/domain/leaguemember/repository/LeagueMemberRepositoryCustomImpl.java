@@ -14,13 +14,22 @@ import java.util.Optional;
 public class LeagueMemberRepositoryCustomImpl implements LeagueMemberRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
-    @Override
-    public Optional<LeagueMember> findLeagueMemberByUserAndLeagues(Long userId, List<Long> leagueIds) {
-        QLeagueMember qLeagueMember = QLeagueMember.leagueMember;
-        LeagueMember leagueMember = queryFactory.selectFrom(qLeagueMember)
-                .where(qLeagueMember.userId.eq(userId).and(qLeagueMember.leagueId.in(leagueIds)))
-                .fetchOne();
+    public List<LeagueMember> findByLeagueIdOrderByTotalScoreDesc(Long leagueId) {
+        QLeagueMember leagueMember = QLeagueMember.leagueMember;
+        return queryFactory
+                .selectFrom(leagueMember)
+                .where(leagueMember.leagueId.eq(leagueId)) // 리그 아이디로 필터링
+                .orderBy(leagueMember.totalScore.desc())  // 점수 내림차순 정렬
+                .fetch();
+    }
 
-        return Optional.ofNullable(leagueMember);
+    public LeagueMember findMostRecentLeagueMemberByUserId(Long userId) {
+        QLeagueMember leagueMember = QLeagueMember.leagueMember;
+        return queryFactory
+                .selectFrom(leagueMember)
+                .where(leagueMember.userId.eq(userId)) // userId로 필터링
+                .orderBy(leagueMember.createdAt.desc()) // createdAt 기준 내림차순 정렬
+                .limit(1) // 가장 최근 1개 레코드만 가져옴
+                .fetchOne(); // 단일 레코드 반환
     }
 }

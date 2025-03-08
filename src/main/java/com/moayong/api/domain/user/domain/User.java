@@ -89,4 +89,8 @@ public class User extends BaseEntity {
     public void upgradeToAdmin() {
         this.role = Role.ADMIN;
     }
+
+    public Integer getGoalAmount() {
+        return this.getMonthlySalary() * this.getMonthlySalary() / 100;
+    }
 }
