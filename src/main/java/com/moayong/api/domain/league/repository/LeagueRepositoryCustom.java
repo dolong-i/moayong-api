@@ -6,5 +6,5 @@ import com.moayong.api.domain.season.domain.Season;
 import java.util.List;
 
 public interface LeagueRepositoryCustom {
-    List<League> findLeaguesBySeason(Season season);
+    List<League> findLeaguesBySeasonId(Long seasonId);
 }
