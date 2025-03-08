@@ -45,8 +45,7 @@ public class SeasonController {
 
     @GetMapping("/api/v1/seasons/open")
     public ApiResponse<SeasonResponse> findOpenSeason() {
-        Season season = seasonService.findOpenSeason()
-                .orElseThrow(() -> new SeasonException(SeasonErrorCode.CURRENT_SEASON_NOT_OPEN));
+        Season season = seasonService.findOpenSeason();
         SeasonResponse response = new SeasonResponse(season);
 
         return ApiResponse.success(response, "현재 시즌 조회 성공");
