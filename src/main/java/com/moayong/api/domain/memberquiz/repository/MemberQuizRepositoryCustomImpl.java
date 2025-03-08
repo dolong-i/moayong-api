@@ -31,7 +31,7 @@ public class MemberQuizRepositoryCustomImpl implements MemberQuizRepositoryCusto
                 .join(qMemberQuiz).on(qQuiz.id.eq(qMemberQuiz.quizId))
                 .join(qLeagueMember).on(qMemberQuiz.leagueMemberId.eq(qLeagueMember.id))
                 .join(qLeague).on(qLeagueMember.leagueId.eq(qLeague.id))
-                .join(qSeason).on(qLeague.season.id.eq(qSeason.id))
+                .join(qSeason).on(qLeague.seasonId.eq(qSeason.id))
                 .where(qLeagueMember.userId.eq(userId)
                         .and(qSeason.id.eq(seasonId)))
                 .fetch();
