@@ -1,5 +1,6 @@
 package com.moayong.api.domain.league.domain;
 
+import com.moayong.api.domain.league.enums.Tier;
 import com.moayong.api.domain.season.domain.Season;
 import com.moayong.api.global.entity.BaseEntity;
 import jakarta.persistence.*;
@@ -17,16 +18,31 @@ public class League extends BaseEntity {
     @Column(name = "id", updatable = false)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name="season_id")
-    private Season season;
+    @Column(name = "season_id", updatable = false)
+    private Long seasonId;
 
-    @Column(name = "tier_id", nullable = false)
-    private Integer tierId;
+    @Column(name = "level", nullable = false)
+    private Integer level;
+
+    @Column(name = "name", nullable = false)
+    private String name;
+
+    @Column(name = "image_url", nullable = false)
+    private String imageUrl;
+
+    @Column(name = "promotion_rate", nullable = false)
+    private Integer promotionRate;
+
+    @Column(name = "relegation_rate", nullable = false)
+    private Integer relegationRate;
 
     @Builder
-    public League(Integer tierId, Season season) {
-        this.tierId = tierId;
-        this.season = season;
+    public League(Long seasonId, Tier tier) {
+        this.seasonId = seasonId;
+        this.level = tier.getLevel();
+        this.name = tier.getName();
+        this.imageUrl = tier.getImageUrl();
+        this.promotionRate = tier.getPromotionRate();
+        this.relegationRate = tier.getRelegationRate();
     }
 }
