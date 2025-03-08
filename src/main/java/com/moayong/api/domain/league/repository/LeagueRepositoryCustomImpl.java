@@ -15,11 +15,11 @@ public class LeagueRepositoryCustomImpl implements LeagueRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<League> findLeaguesBySeason(Season season) {
+    public List<League> findLeaguesBySeasonId(Long seasonId) {
         QLeague qLeague = QLeague.league;
 
         return queryFactory.selectFrom(qLeague)
-            .where(qLeague.season.eq(season))
+            .where(qLeague.seasonId.eq(seasonId))
             .fetch();
     }
 }
