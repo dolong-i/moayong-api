@@ -26,13 +26,22 @@ public class LeagueMember extends BaseEntity {
     @Column(name="league_id")
     private Long leagueId;
 
+    @Column(name="total_score")
+    private Integer totalScore;
+
     @Column(name = "goal_amount")
     private Integer goalAmount;
 
     @Builder
-    public LeagueMember(Long userId, Long leagueId, Integer goalAmount) {
+    public LeagueMember(Long userId, Long leagueId, Integer goalAmount, Integer totalScore) {
         this.userId = userId;
         this.leagueId = leagueId;
         this.goalAmount = goalAmount;
+        this.totalScore = totalScore;
+    }
+
+    public Integer addScore(int score) {
+        this.totalScore += score;
+        return totalScore;
     }
 }

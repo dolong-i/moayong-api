@@ -15,6 +15,7 @@ import com.moayong.api.domain.memberquiz.repository.MemberQuizRepository;
 import com.moayong.api.domain.memberquiz.repository.UserDailyQuizRedisRepository;
 import com.moayong.api.domain.quiz.domain.Quiz;
 import com.moayong.api.domain.quiz.service.QuizService;
+import com.moayong.api.domain.user.service.UserCurrentLeagueInfoService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -30,7 +31,8 @@ import java.util.concurrent.ThreadLocalRandom;
 public class MemberQuizService {
     private final MemberQuizRepository memberQuizRepository;
     private final QuizService quizService;
-    private final LeagueMemberService leagueMemberService;
+    private final UserCurrentLeagueInfoService userInfoService;
+    private final LeagueMemberService memberService;
     private final UserDailyQuizRedisRepository redisRepository;
 
     public MemberQuiz save(MemberQuiz memberQuiz) {
@@ -117,7 +119,8 @@ public class MemberQuizService {
     }
 
     public QuizSubmissionDto submitAnswer(Long userId, Long quizId, Integer userAnswer) {
-        LeagueMember leagueMember = findCurrentLeagueMember(userId);
+        Long memberId = userInfoService.findLeagueMemberId(userId);
+        LeagueMember leagueMember = memberService.findById(memberId);
 
         Quiz quiz = findByQuizId(quizId);
         MemberQuizStatus status = quiz.getAnswerNumber().equals(userAnswer) ? MemberQuizStatus.CORRECT : MemberQuizStatus.WRONG;
@@ -139,15 +142,6 @@ public class MemberQuizService {
         // TODO - TotalScore 레디스 처리
 
         return new QuizSubmissionDto(status, quiz);
-    }
-
-    private LeagueMember findCurrentLeagueMember(Long userId) {
-        return leagueMemberService.findCurrentLeagueMemberOptional(userId)
-                .orElseThrow(() -> {
-                    Map<String, Object> errorData = new HashMap<>();
-                    errorData.put("userId", userId);
-                    return new LeagueMemberException(LeagueMemberErrorCode.LEAGUE_MEMBER_NOT_FOUND, errorData);
-                });
     }
 
     public Quiz findByQuizId(Long quizId) {

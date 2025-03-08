@@ -6,6 +6,7 @@ import com.moayong.api.domain.auth.enums.AuthErrorCode;
 import com.moayong.api.domain.auth.enums.Role;
 import com.moayong.api.domain.auth.exception.AuthException;
 import com.moayong.api.domain.auth.service.AuthService;
+import com.moayong.api.domain.user.service.UserCurrentLeagueInfoService;
 import com.moayong.api.domain.user.domain.User;
 import com.moayong.api.domain.user.service.UserService;
 import com.moayong.api.global.util.CookieUtil;
@@ -35,6 +36,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtTokenService tokenService;
     private final UserService userService;
     private final AuthService authService;
+    private final UserCurrentLeagueInfoService userInfoService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -75,11 +77,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             Long userId = tokenService.getUserIdFromToken(accessToken);
 
             User user = userService.findUserByIdOptional(userId)
-                    .orElseThrow(() -> {
-                Map<String, Object> errorData = new HashMap<>();
-                errorData.put("userId", userId);
-                return new AuthException(AuthErrorCode.USER_NOT_FOUND, errorData);
-            });
+                    .orElseThrow(() -> new AuthException(AuthErrorCode.USER_NOT_FOUND));
+
+
+            String userUrl = "/api/v1/users/" + user.getId();
+
+            // 레디스에 캐싱정보가 있나 검사 없으면 에러
+            if (!(requestURI.equals(userUrl) || requestURI.startsWith(userUrl + "/match"))) {
+                userInfoService.checkUserInfo(userId);
+            }
+
             userPrincipal = new UserPrincipal(user, new HashMap<>());
         }
 

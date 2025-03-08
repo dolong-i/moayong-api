@@ -10,7 +10,6 @@ import com.moayong.api.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -26,11 +25,7 @@ public class UserService {
 
     public User findUserById(Long id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> {
-                    Map<String, Object> errorData = new HashMap<>();
-                    errorData.put("id", id);
-                    return new UserException(UserErrorCode.USER_NOT_FOUND, errorData);
-                });
+                .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND, Map.of("id", id)));
     }
 
     public Optional<User> findUserByIdOptional(Long id) {

@@ -6,5 +6,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface LeagueMemberRepositoryCustom {
-    Optional<LeagueMember> findLeagueMemberByUserAndLeagues(Long userId, List<Long> leagueIds);
+    List<LeagueMember> findByLeagueIdOrderByTotalScoreDesc(Long leagueId);
+    LeagueMember findMostRecentLeagueMemberByUserId(Long userId);
 }
