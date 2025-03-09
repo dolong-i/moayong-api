@@ -1,4 +1,5 @@
 package com.moayong.api.domain.leaguemember.exception;
+
 import com.moayong.api.domain.leaguemember.enums.LeagueMemberErrorCode;
 import com.moayong.api.global.exception.DomainSpecificException;
 

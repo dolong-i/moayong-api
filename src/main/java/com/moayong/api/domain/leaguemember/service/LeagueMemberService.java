@@ -1,6 +1,5 @@
 package com.moayong.api.domain.leaguemember.service;
 
-import com.moayong.api.domain.league.service.LeagueService;
 import com.moayong.api.domain.leaguemember.domain.LeagueMember;
 import com.moayong.api.domain.leaguemember.enums.LeagueMemberErrorCode;
 import com.moayong.api.domain.leaguemember.exception.LeagueMemberException;
@@ -8,6 +7,7 @@ import com.moayong.api.domain.leaguemember.repository.LeagueMemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.*;
 
 @Service
