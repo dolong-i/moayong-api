@@ -11,6 +11,7 @@ import com.moayong.api.domain.leaguemember.service.LeagueMemberService;
 import com.moayong.api.domain.user.service.UserCurrentLeagueInfoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
@@ -26,6 +27,7 @@ public class AttendanceService {
     private final UserCurrentLeagueInfoService userInfoService;
     private final LeagueMemberService leagueMemberService;
 
+    @Transactional
     public void saveAttendance(Long userId) {
         LocalDate today = LocalDate.now();
 
@@ -36,12 +38,15 @@ public class AttendanceService {
             throw new AttendanceException(AttendanceErrorCode.ALREADY_ATTENDED_TODAY);
         }
 
-        attendanceRepository.save(
+        Attendance saved = attendanceRepository.save(
                 Attendance.builder()
                         .leagueMemberId(leagueMemberId)
                         .date(today)
                         .status(AttendanceStatus.SUCCESS)
                         .build());
+
+        LeagueMember leagueMember = leagueMemberService.findById(leagueMemberId);
+        leagueMember.addScore(saved.getScore());
     }
 
     public Attendance findAttendanceDaily(Long userId) {
