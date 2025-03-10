@@ -8,4 +8,6 @@ import java.util.List;
 public interface LeagueMemberRepository extends JpaRepository<LeagueMember, Long>, LeagueMemberRepositoryCustom {
 
     List<LeagueMember> findByLeagueId(Long leagueId);
+
+    List<LeagueMember> findAllByUserId(Long userId);
 }

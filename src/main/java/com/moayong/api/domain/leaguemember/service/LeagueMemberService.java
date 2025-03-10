@@ -7,8 +7,9 @@ import com.moayong.api.domain.leaguemember.repository.LeagueMemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
-import java.util.*;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -38,5 +39,9 @@ public class LeagueMemberService {
 
     public LeagueMember save(LeagueMember leagueMember) {
         return memberRepository.save(leagueMember);
+    }
+
+    public List<LeagueMember> findAllByUserId(Long userId) {
+        return memberRepository.findAllByUserId(userId);
     }
 }
