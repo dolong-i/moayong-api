@@ -1,5 +1,6 @@
 package com.moayong.api.domain.memberquiz.dto.response;
 
+import com.moayong.api.domain.memberquiz.dto.service.QuizSubmissionDto;
 import com.moayong.api.domain.memberquiz.enums.MemberQuizStatus;
 
 public record QuizSubmissionResponse(

@@ -2,9 +2,9 @@ package com.moayong.api.domain.memberquiz.controller;
 
 import com.moayong.api.domain.memberquiz.dto.request.AnswerRequest;
 import com.moayong.api.domain.memberquiz.dto.response.QuizKnowledgeResponse;
-import com.moayong.api.domain.memberquiz.dto.response.QuizSubmissionDto;
-import com.moayong.api.domain.memberquiz.dto.response.QuizSubmissionResponse;
 import com.moayong.api.domain.memberquiz.dto.response.QuizProblemResponse;
+import com.moayong.api.domain.memberquiz.dto.response.QuizSubmissionResponse;
+import com.moayong.api.domain.memberquiz.dto.service.QuizSubmissionDto;
 import com.moayong.api.domain.memberquiz.service.MemberQuizService;
 import com.moayong.api.domain.quiz.domain.Quiz;
 import com.moayong.api.global.api.ApiResponse;
@@ -30,7 +30,7 @@ public class MemberQuizController {
 
     @GetMapping("/users/{userId}/quizzes/{quizId}/problem")
     public ApiResponse<QuizProblemResponse> showQuiz(@PathVariable("userId") Long userId, @PathVariable("quizId") Long quizId) {
-        Quiz quiz = memberQuizService.findByQuizId(quizId);
+        Quiz quiz = memberQuizService.startQuizChallenge(userId, quizId);
         QuizProblemResponse response = new QuizProblemResponse(quiz);
         return ApiResponse.success(response, "퀴즈 도전하기 진입 성공");
     }
@@ -61,7 +61,7 @@ public class MemberQuizController {
 
     @GetMapping("/users/{userId}/quizzes/{quizId}")
     public ApiResponse<QuizKnowledgeResponse> findSolvedQuiz(@PathVariable("userId") Long userId, @PathVariable("quizId") Long quizId) {
-        Quiz quiz = memberQuizService.findByUserAndQuiz(userId, quizId);
+        Quiz quiz = memberQuizService.findSolvedQuiz(userId, quizId);
         QuizKnowledgeResponse response = new QuizKnowledgeResponse(quiz);
 
         return ApiResponse.success(response, "완료한 퀴즈 단건 조회 성공");

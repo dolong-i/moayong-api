@@ -1,6 +1,5 @@
 package com.moayong.api.domain.quiz.domain;
 
-import com.moayong.api.domain.memberquiz.dto.redis.UserDailyQuiz;
 import com.moayong.api.domain.quiz.converter.OptionsConverter;
 import com.moayong.api.global.entity.BaseEntity;
 import jakarta.persistence.*;
@@ -48,11 +47,5 @@ public class Quiz extends BaseEntity {
         this.problemOptions = problemOptions;
         this.answerNumber = answerNumber;
         this.answerDescription = answerDescription;
-    }
-
-    public Quiz(UserDailyQuiz userDailyQuiz) {
-        this.id = userDailyQuiz.getQuizId();
-        this.financeTitle = userDailyQuiz.getFinanceTitle();
-        this.financeDescription = userDailyQuiz.getFinanceDescription();
     }
 }
