@@ -6,7 +6,6 @@ spring:
   profiles:
     include: secret
   jpa:
-    show-sql: true
     hibernate:
       ddl-auto: create
     properties:

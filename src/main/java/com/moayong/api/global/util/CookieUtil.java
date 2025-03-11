@@ -14,7 +14,7 @@ public class CookieUtil {
     public static void addCookie(HttpServletResponse response, String name, String value, int maxAge) {
         Cookie cookie = new Cookie(name, value);
         cookie.setHttpOnly(true); // JavaScript에서 접근 불가
-        cookie.setSecure(false); // HTTPS에서만 전송 (운영 환경에서 필수)
+        cookie.setSecure(true); // HTTPS에서만 전송 (운영 환경에서 필수)
         cookie.setPath("/"); // 모든 요청에서 접근 가능
         cookie.setMaxAge(maxAge); // 만료 시간 설정
         response.addCookie(cookie);
@@ -23,7 +23,7 @@ public class CookieUtil {
     public static void deleteCookie(HttpServletResponse response, String name) {
         Cookie cookie = new Cookie(name, null);
         cookie.setHttpOnly(true);
-        cookie.setSecure(false);
+        cookie.setSecure(true);
         cookie.setPath("/");
         cookie.setMaxAge(0); // 즉시 만료
         response.addCookie(cookie);
