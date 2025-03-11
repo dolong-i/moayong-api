@@ -19,25 +19,6 @@ public class MemberQuizRepositoryCustomImpl implements MemberQuizRepositoryCusto
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<Quiz> findSolvedQuizzesByUserAndSeason(Long userId, Long seasonId) {
-        QQuiz qQuiz = QQuiz.quiz;
-        QMemberQuiz qMemberQuiz = QMemberQuiz.memberQuiz;
-        QLeagueMember qLeagueMember = QLeagueMember.leagueMember;
-        QLeague qLeague = QLeague.league;
-        QSeason qSeason = QSeason.season;
-
-        return queryFactory.select(qQuiz)
-                .from(qQuiz)
-                .join(qMemberQuiz).on(qQuiz.id.eq(qMemberQuiz.quizId))
-                .join(qLeagueMember).on(qMemberQuiz.leagueMemberId.eq(qLeagueMember.id))
-                .join(qLeague).on(qLeagueMember.leagueId.eq(qLeague.id))
-                .join(qSeason).on(qLeague.seasonId.eq(qSeason.id))
-                .where(qLeagueMember.userId.eq(userId)
-                        .and(qSeason.id.eq(seasonId)))
-                .fetch();
-    }
-
-    @Override
     public List<Long> findSolvedQuizzesByUserId(Long userId) {
         QMemberQuiz qMemberQuiz = QMemberQuiz.memberQuiz;
         QLeagueMember qLeagueMember = QLeagueMember.leagueMember;

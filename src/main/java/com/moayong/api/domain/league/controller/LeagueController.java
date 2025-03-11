@@ -42,6 +42,14 @@ public class LeagueController {
         return ApiResponse.success(response, "리그 전체 조회 성공");
     }
 
+    @GetMapping("/api/v1/seasons/{seasonId}/leagues")
+    public ApiResponse<List<LeagueResponse>> findAllLeaguesBySeason(@PathVariable("seasonId") Long seasonId) {
+        List<League> leagues = leagueService.findAllLeaguesBySeason(seasonId);
+        List<LeagueResponse> response =  leagues.stream().map(LeagueResponse::new).toList();
+
+        return ApiResponse.success(response, "시즌에 대한 리그 조회 성공");
+    }
+
     @PostMapping("/api/v1/leagues/new-season")
     public ApiResponse<Void> createLeaguesForNewSeason() {
         leagueService.createLeaguesForNewSeason();

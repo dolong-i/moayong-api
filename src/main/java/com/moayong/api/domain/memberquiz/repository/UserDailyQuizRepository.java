@@ -6,5 +6,5 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 
 public interface UserDailyQuizRepository extends CrudRepository<UserDailyQuiz, String> {
-    List<UserDailyQuiz> findAllByUserId(Long userId);
+    List<UserDailyQuiz> findAllByMemberId(Long userId);
 }

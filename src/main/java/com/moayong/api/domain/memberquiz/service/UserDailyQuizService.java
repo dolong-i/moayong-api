@@ -17,13 +17,13 @@ import java.util.Optional;
 public class UserDailyQuizService {
     private final UserDailyQuizRepository dailyQuizRepository;
 
-    public List<UserDailyQuiz> findAllByUserId(Long userId) {
-        return dailyQuizRepository.findAllByUserId(userId);
+    public List<UserDailyQuiz> findAllByMemberId(Long memberId) {
+        return dailyQuizRepository.findAllByMemberId(memberId);
     }
 
-    public void save(Long userId, Quiz quiz) {
+    public void save(Long memberId, Quiz quiz) {
         dailyQuizRepository.save(UserDailyQuiz.builder()
-                .userId(userId)
+                .memberId(memberId)
                 .quizId(quiz.getId())
                 .status(DailyQuizRedisStatus.UNSOLVED.name())
                 .ttl(getTtlUntilNext9AM())
@@ -40,14 +40,14 @@ public class UserDailyQuizService {
         return Duration.between(now, next9AM).toSeconds();
     }
 
-    public Optional<UserDailyQuiz> findByIdOptional(Long userId, Long quizId) {
-        String id = getId(userId, quizId);
+    public Optional<UserDailyQuiz> findByIdOptional(Long memberId, Long quizId) {
+        String id = getId(memberId, quizId);
 
         return dailyQuizRepository.findById(id);
     }
 
-    private String getId(Long userId, Long quizId) {
-        return userId + ":" + quizId;
+    private String getId(Long memberId, Long quizId) {
+        return memberId + ":" + quizId;
     }
 
     public void updateStatus(UserDailyQuiz cachedQuiz, DailyQuizRedisStatus status) {

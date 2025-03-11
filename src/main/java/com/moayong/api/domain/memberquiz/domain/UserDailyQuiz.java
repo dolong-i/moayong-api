@@ -15,7 +15,7 @@ public class UserDailyQuiz {
         private String id;
 
         @Indexed
-        private Long userId;
+        private Long memberId;
         private Long quizId;
 
         @Setter
@@ -25,9 +25,9 @@ public class UserDailyQuiz {
         private long ttl;
 
         @Builder
-        public UserDailyQuiz(Long userId, Long quizId, String status, long ttl) {
-                this.id = userId + ":" + quizId;
-                this.userId = userId;
+        public UserDailyQuiz(Long memberId, Long quizId, String status, long ttl) {
+                this.id = memberId + ":" + quizId;
+                this.memberId = memberId;
                 this.quizId = quizId;
                 this.status = status;
                 this.ttl = ttl;

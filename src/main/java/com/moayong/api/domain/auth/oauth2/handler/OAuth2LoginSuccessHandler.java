@@ -7,6 +7,7 @@ import com.moayong.api.global.util.CookieUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -15,6 +16,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
@@ -45,7 +47,6 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         if (role.equals(Role.ONBOARDING)) {
             String accessToken = tokenService.generateOnboardingAccessToken(userPrincipal.getUserId());
             CookieUtil.addCookie(response, "accessToken", accessToken, (int) (tokenService.getOnboardingAccessTokenExpiration()));
-
         } else {
             String accessToken = tokenService.generateAccessToken(Long.valueOf(userPrincipal.getUserId()));
             String refreshToken = tokenService.generateRefreshToken(Long.valueOf(userPrincipal.getUserId()));

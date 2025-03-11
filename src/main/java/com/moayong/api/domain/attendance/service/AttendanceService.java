@@ -8,7 +8,7 @@ import com.moayong.api.domain.attendance.exception.AttendanceException;
 import com.moayong.api.domain.attendance.repository.AttendanceRepository;
 import com.moayong.api.domain.leaguemember.domain.LeagueMember;
 import com.moayong.api.domain.leaguemember.service.LeagueMemberService;
-import com.moayong.api.domain.user.service.UserCurrentLeagueInfoService;
+import io.micrometer.common.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,52 +23,37 @@ import java.util.Optional;
 @Service
 public class AttendanceService {
     private final AttendanceRepository attendanceRepository;
-    private final UserCurrentLeagueInfoService userInfoService;
     private final LeagueMemberService leagueMemberService;
 
     @Transactional
-    public void saveAttendance(Long userId) {
+    public void saveAttendance(Long memberId) {
         LocalDate today = LocalDate.now();
 
-        Long leagueMemberId = userInfoService.findLeagueMemberId(userId);
-
-        Optional<Attendance> attendance = attendanceRepository.findByLeagueMemberIdAndDate(leagueMemberId, today);
+        Optional<Attendance> attendance = attendanceRepository.findByLeagueMemberIdAndDate(memberId, today);
         if (attendance.isPresent()) {
             throw new AttendanceException(AttendanceErrorCode.ALREADY_ATTENDED_TODAY);
         }
 
         Attendance saved = attendanceRepository.save(
                 Attendance.builder()
-                        .leagueMemberId(leagueMemberId)
+                        .leagueMemberId(memberId)
                         .date(today)
                         .status(AttendanceStatus.SUCCESS)
                         .build());
 
-        LeagueMember leagueMember = leagueMemberService.findById(leagueMemberId);
-        leagueMember.addScore(saved.getScore());
+        leagueMemberService.addScore(memberId, saved.getScore());
     }
 
-    public Attendance findAttendanceDaily(Long userId) {
-        Long leagueMemberId = userInfoService.findLeagueMemberId(userId);
-
-        return attendanceRepository.findByLeagueMemberIdAndDate(leagueMemberId, LocalDate.now())
+    public Attendance findAttendanceDaily(Long memberId) {
+        return attendanceRepository.findByLeagueMemberIdAndDate(memberId, LocalDate.now())
                 .orElse(null);
     }
 
     public List<Attendance> findAttendanceMonthly(Long userId, String month) {
-        List<Long> leagueMemberIds;
+        List<Long> leagueMemberIds = leagueMemberService.findAllByUserId(userId).stream().map(LeagueMember::getId).toList();
 
         try {
-            YearMonth yearMonth;
-            if (month == null || month.isBlank()) {
-                yearMonth = YearMonth.now();
-                leagueMemberIds = Collections.singletonList(userInfoService.findLeagueMemberId(userId));
-            } else {
-                yearMonth = YearMonth.parse(month, DateTimeFormatter.ofPattern("yyyy-MM"));
-                leagueMemberIds = leagueMemberService.findAllByUserId(userId)
-                        .stream().map(LeagueMember::getId).toList();
-            }
-
+            YearMonth yearMonth = StringUtils.isBlank(month) ? YearMonth.now() : YearMonth.parse(month, DateTimeFormatter.ofPattern("yyyy-MM"));
             LocalDate startDate = yearMonth.atDay(1);
             LocalDate endDate = yearMonth.atEndOfMonth();
 

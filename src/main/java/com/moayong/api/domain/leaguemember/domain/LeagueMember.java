@@ -1,11 +1,9 @@
 package com.moayong.api.domain.leaguemember.domain;
 
+import com.moayong.api.domain.leaguemember.enums.LeagueMemberStatus;
 import com.moayong.api.global.entity.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @EntityListeners(AuditingEntityListener.class)
@@ -14,7 +12,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "league_member")
 public class LeagueMember extends BaseEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false)
@@ -32,16 +29,21 @@ public class LeagueMember extends BaseEntity {
     @Column(name = "goal_amount")
     private Integer goalAmount;
 
+    @Setter
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
+    private LeagueMemberStatus status;
+
     @Builder
-    public LeagueMember(Long userId, Long leagueId, Integer goalAmount, Integer totalScore) {
+    public LeagueMember(Long userId, Long leagueId, LeagueMemberStatus status, Integer goalAmount, Integer totalScore) {
         this.userId = userId;
         this.leagueId = leagueId;
+        this.status = status;
         this.goalAmount = goalAmount;
         this.totalScore = totalScore;
     }
 
-    public Integer addScore(int score) {
+    public void addScore(int score) {
         this.totalScore += score;
-        return totalScore;
     }
 }

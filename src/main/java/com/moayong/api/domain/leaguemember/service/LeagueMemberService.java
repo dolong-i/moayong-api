@@ -2,14 +2,17 @@ package com.moayong.api.domain.leaguemember.service;
 
 import com.moayong.api.domain.leaguemember.domain.LeagueMember;
 import com.moayong.api.domain.leaguemember.enums.LeagueMemberErrorCode;
+import com.moayong.api.domain.leaguemember.enums.LeagueMemberStatus;
 import com.moayong.api.domain.leaguemember.exception.LeagueMemberException;
 import com.moayong.api.domain.leaguemember.repository.LeagueMemberRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.IntStream;
 
 @Service
 @RequiredArgsConstructor
@@ -43,5 +46,29 @@ public class LeagueMemberService {
 
     public List<LeagueMember> findAllByUserId(Long userId) {
         return memberRepository.findAllByUserId(userId);
+    }
+
+    @Transactional
+    public void addScore(Long memberId, Integer score) {
+        LeagueMember member = findById(memberId);
+        member.addScore(score);
+    }
+
+    public Integer getRank(List<LeagueMember> members, Long memberId) {// 내 점수가 전체 중에서 상위 몇 %인지 계산
+        int totalMembers = members.size();
+        return IntStream.range(0, totalMembers)
+                .filter(i -> members.get(i).getId().equals(memberId))
+                .findFirst()
+                .orElse(totalMembers) + 1;
+    }
+
+    @Transactional
+    public void deactivateAllActiveMembers() {
+        memberRepository.updateStatusByCurrentStatus(LeagueMemberStatus.ACTIVE, LeagueMemberStatus.INACTIVE);
+    }
+
+    public Integer getRate(Integer total, Integer rank) {
+        if (total < 3) return 50;
+        return (int)Math.round(((double) rank / total) * 100);
     }
 }

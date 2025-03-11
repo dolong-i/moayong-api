@@ -19,9 +19,6 @@ public class Season extends BaseEntity {
     @Column(name = "id", updatable = false)
     private Long id;
 
-    @Column(name = "number", unique = true, nullable = false)
-    private Integer number;
-
     @Setter
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
@@ -34,8 +31,7 @@ public class Season extends BaseEntity {
     private LocalDateTime endedAt;
 
     @Builder
-    public Season(Integer number, SeasonStatus status) {
-        this.number = number;
+    public Season(SeasonStatus status) {
         this.status = status;
         this.startedAt = LocalDateTime.now();
         this.endedAt = LocalDateTime.now().plusDays(SeasonPeriod.Week.getPeriod());

@@ -18,15 +18,15 @@ import java.util.List;
 public class AttendanceController {
     private final AttendanceService attendanceService;
 
-    @PostMapping("/users/{id}/attendances/today")
-    public ApiResponse<Void> saveAttendanceToday(@PathVariable("id") Long userId) {
-        attendanceService.saveAttendance(userId);
+    @PostMapping("/members/{id}/attendances/today")
+    public ApiResponse<Void> saveAttendanceToday(@PathVariable("id") Long memberId) {
+        attendanceService.saveAttendance(memberId);
         return ApiResponse.success(null, "출석체크 성공");
     }
 
-    @GetMapping("/users/{id}/attendances/today")
-    public ApiResponse<AttendanceDailyResponse> findAttendanceDaily(@PathVariable("id") Long userId) {
-        Attendance attendance = attendanceService.findAttendanceDaily(userId);
+    @GetMapping("/members/{id}/attendances/today")
+    public ApiResponse<AttendanceDailyResponse> findAttendanceDaily(@PathVariable("id") Long memberId) {
+        Attendance attendance = attendanceService.findAttendanceDaily(memberId);
         AttendanceDailyResponse response = new AttendanceDailyResponse(attendance);
         return ApiResponse.success(response, "당일 출석 조회 성공");
     }

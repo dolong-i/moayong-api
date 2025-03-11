@@ -7,7 +7,6 @@ import java.time.LocalDateTime;
 
 public record SeasonResponse (
         Long id,
-        Integer number,
         SeasonStatus status,
         LocalDateTime startedAt,
         LocalDateTime endedAt
@@ -15,7 +14,6 @@ public record SeasonResponse (
     public SeasonResponse(Season season) {
         this(
                 season.getId(),
-                season.getNumber(),
                 season.getStatus(),
                 season.getStartedAt(),
                 season.getEndedAt()

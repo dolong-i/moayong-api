@@ -10,7 +10,6 @@ import com.moayong.api.domain.auth.oauth2.userinfo.OAuth2UserInfo;
 import com.moayong.api.domain.auth.repository.UserTemporaryRepository;
 import com.moayong.api.domain.leaguemember.domain.LeagueMember;
 import com.moayong.api.domain.leaguemember.service.LeagueMatchService;
-import com.moayong.api.domain.user.service.UserCurrentLeagueInfoService;
 import com.moayong.api.domain.user.domain.User;
 import com.moayong.api.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +24,6 @@ public class AuthService {
     private final UserTemporaryRepository userTemporaryRepository;
     private final JwtTokenService tokenService;
     private final UserService userService;
-    private final UserCurrentLeagueInfoService userInfoService;
     private final LeagueMatchService matchService;
 
     public UserTemporary findUserTemporaryById(String id) {
@@ -44,10 +42,7 @@ public class AuthService {
         User user = userService.saveFromTemporary(userTemporary, onboardingServiceDto);
 
         // 가장 낮은 리그 매칭 후 저장
-        LeagueMember member = matchService.matchUserToLeagueByLevel(user, 1);
-
-        // 레디스에 캐싱
-        userInfoService.saveNewSeasonInfo(member);
+        matchService.matchUserToLeagueByLevel(user, 1);
 
         return user;
     }

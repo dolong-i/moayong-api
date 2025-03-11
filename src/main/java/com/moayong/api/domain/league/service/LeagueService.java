@@ -4,6 +4,7 @@ import com.moayong.api.domain.league.domain.League;
 import com.moayong.api.domain.league.enums.LeagueErrorCode;
 import com.moayong.api.domain.league.exception.LeagueException;
 import com.moayong.api.domain.league.repository.LeagueRepository;
+import com.moayong.api.domain.leaguemember.domain.LeagueMember;
 import com.moayong.api.domain.leaguemember.service.LeagueMemberService;
 import com.moayong.api.domain.season.domain.Season;
 import com.moayong.api.domain.season.enums.SeasonStatus;
@@ -26,17 +27,10 @@ public class LeagueService {
     private final SeasonService seasonService;
     private final LeagueRepository leagueRepository;
     private final StringRedisTemplate redisTemplate;
-
-    // TODO: 테스트용 코드 운영때는 미리 새로운 시즌을 만들어둬야할듯
-    @PostConstruct
-    public void init() {
-        // 애플리케이션 시작 후 한 번 실행할 로직
-        createLeaguesForNewSeason();
-    }
+    private final LeagueMemberService memberService;
 
     public List<League> findOpenLeagues() {
         Season openSeason = seasonService.findOpenSeason();
-
         return leagueRepository.findLeaguesBySeasonId(openSeason.getId());
     }
 
@@ -50,6 +44,15 @@ public class LeagueService {
 
     public List<League> findAllLeagues() {
         return leagueRepository.findAll();
+    }
+
+    public Integer getNextLevel(League league, int rate) {
+        int level = league.getLevel();
+
+        if (rate <= league.getPromotionRate()) return level + 1;
+        if (rate > league.getRelegationRate()) return level - 1;
+
+        return level;
     }
 
     @Transactional
@@ -68,18 +71,15 @@ public class LeagueService {
             Season openSeason = seasonService.findOpenSeasonOptional().orElse(null);
             if (openSeason != null) {
                 seasonService.updateSeasonStatus(openSeason.getId(), SeasonStatus.CLOSE);
-                log.info("시즌 {} 종료", openSeason.getNumber());
+                log.info("시즌 {} 종료", openSeason.getId());
             }
 
-            // 새 시즌 생성
-            int newSeasonNumber = openSeason != null ? openSeason.getNumber() + 1 : 1;
             Season newSeason = seasonService.save(
                     Season.builder()
                             .status(SeasonStatus.OPEN)
-                            .number(newSeasonNumber)
                             .build()
             );
-            log.info("새 시즌 {} 생성", newSeasonNumber);
+            log.info("새 시즌 {} 생성", newSeason.getId());
 
             // 모든 티어에 대해 리그 생성
             Tier[] tiers = Tier.values();
@@ -88,6 +88,8 @@ public class LeagueService {
                 leagueRepository.save(league);
                 log.info("티어 {}에 대해 리그 생성", tier.name());
             }
+
+            memberService.deactivateAllActiveMembers();
 
             log.info("새 시즌과 리그 생성 완료!");
         } finally {
@@ -103,5 +105,9 @@ public class LeagueService {
                 .filter(league -> league.getLevel().equals(level))
                 .findFirst()
                 .orElse(null);
+    }
+
+    public List<League> findAllLeaguesBySeason(Long seasonId) {
+        return leagueRepository.findLeaguesBySeasonId(seasonId);
     }
 }

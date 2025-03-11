@@ -5,6 +5,7 @@ import com.moayong.api.domain.season.enums.SeasonErrorCode;
 import com.moayong.api.domain.season.enums.SeasonStatus;
 import com.moayong.api.domain.season.exception.SeasonException;
 import com.moayong.api.domain.season.repository.SeasonRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -39,9 +40,9 @@ public class SeasonService {
                 .orElseThrow(() -> new SeasonException(SeasonErrorCode.SEASON_NOT_FOUND, Map.of("id", id)));
     }
 
+    @Transactional
     public void updateSeasonStatus(Long id, SeasonStatus status) {
         Season season = findSeasonById(id);
         season.setStatus(status);
-        seasonRepository.save(season);
     }
 }
