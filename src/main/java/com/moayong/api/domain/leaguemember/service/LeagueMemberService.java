@@ -48,6 +48,15 @@ public class LeagueMemberService {
         return memberRepository.findAllByUserId(userId);
     }
 
+    public List<LeagueMember> findAll() {
+        return memberRepository.findAll();
+    }
+
+    public LeagueMember findActiveMemberByUserId(Long userId) {
+        return memberRepository.findActiveMemberByUserId(userId)
+                .orElseThrow(() -> new LeagueMemberException(LeagueMemberErrorCode.ACTIVE_LEAGUE_MEMBER_NOT_FOUND));
+    }
+
     @Transactional
     public void addScore(Long memberId, Integer score) {
         LeagueMember member = findById(memberId);
