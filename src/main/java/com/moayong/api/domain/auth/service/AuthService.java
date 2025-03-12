@@ -8,7 +8,6 @@ import com.moayong.api.domain.auth.exception.AuthException;
 import com.moayong.api.domain.auth.jwt.JwtTokenService;
 import com.moayong.api.domain.auth.oauth2.userinfo.OAuth2UserInfo;
 import com.moayong.api.domain.auth.repository.UserTemporaryRepository;
-import com.moayong.api.domain.leaguemember.domain.LeagueMember;
 import com.moayong.api.domain.leaguemember.service.LeagueMatchService;
 import com.moayong.api.domain.user.domain.User;
 import com.moayong.api.domain.user.service.UserService;

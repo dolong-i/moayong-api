@@ -1,7 +1,7 @@
 package com.moayong.api.domain.season.dto.response;
 
-import com.moayong.api.domain.season.enums.SeasonStatus;
 import com.moayong.api.domain.season.domain.Season;
+import com.moayong.api.domain.season.enums.SeasonStatus;
 
 import java.time.LocalDateTime;
 

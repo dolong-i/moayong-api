@@ -1,6 +1,5 @@
 package com.moayong.api.domain.auth.config;
 
-import com.moayong.api.domain.auth.enums.Role;
 import com.moayong.api.domain.auth.jwt.JwtAuthenticationFilter;
 import com.moayong.api.domain.auth.jwt.JwtExceptionFilter;
 import com.moayong.api.domain.auth.oauth2.handler.OAuth2LoginFailureHandler;

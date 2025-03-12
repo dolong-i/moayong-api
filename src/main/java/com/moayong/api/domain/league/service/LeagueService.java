@@ -2,15 +2,13 @@ package com.moayong.api.domain.league.service;
 
 import com.moayong.api.domain.league.domain.League;
 import com.moayong.api.domain.league.enums.LeagueErrorCode;
+import com.moayong.api.domain.league.enums.Tier;
 import com.moayong.api.domain.league.exception.LeagueException;
 import com.moayong.api.domain.league.repository.LeagueRepository;
-import com.moayong.api.domain.leaguemember.domain.LeagueMember;
 import com.moayong.api.domain.leaguemember.service.LeagueMemberService;
 import com.moayong.api.domain.season.domain.Season;
 import com.moayong.api.domain.season.enums.SeasonStatus;
 import com.moayong.api.domain.season.service.SeasonService;
-import com.moayong.api.domain.league.enums.Tier;
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -18,7 +16,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor

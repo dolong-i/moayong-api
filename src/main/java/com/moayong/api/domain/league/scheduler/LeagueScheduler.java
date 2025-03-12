@@ -1,6 +1,5 @@
 package com.moayong.api.domain.league.scheduler;
 
-import com.moayong.api.domain.league.repository.LeagueRepository;
 import com.moayong.api.domain.league.service.LeagueService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;

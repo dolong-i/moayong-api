@@ -1,7 +1,7 @@
 package com.moayong.api.domain.season.dto.request;
 
-import com.moayong.api.domain.season.enums.SeasonStatus;
 import com.moayong.api.domain.season.domain.Season;
+import com.moayong.api.domain.season.enums.SeasonStatus;
 import jakarta.validation.constraints.NotNull;
 
 public record SeasonSaveRequest (

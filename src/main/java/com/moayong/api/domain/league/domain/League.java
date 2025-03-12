@@ -1,10 +1,12 @@
 package com.moayong.api.domain.league.domain;
 
 import com.moayong.api.domain.league.enums.Tier;
-import com.moayong.api.domain.season.domain.Season;
 import com.moayong.api.global.entity.BaseEntity;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @EntityListeners(AuditingEntityListener.class)

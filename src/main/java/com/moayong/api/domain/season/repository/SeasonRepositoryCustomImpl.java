@@ -5,7 +5,6 @@ import com.moayong.api.domain.season.domain.Season;
 import com.moayong.api.domain.season.enums.SeasonStatus;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;

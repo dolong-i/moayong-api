@@ -5,7 +5,10 @@ import com.moayong.api.domain.quiz.dto.response.QuizResponse;
 import com.moayong.api.domain.quiz.service.QuizService;
 import com.moayong.api.global.api.ApiResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController

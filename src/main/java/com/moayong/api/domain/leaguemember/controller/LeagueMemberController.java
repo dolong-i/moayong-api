@@ -1,10 +1,7 @@
 package com.moayong.api.domain.leaguemember.controller;
 
-import com.moayong.api.domain.league.dto.response.LeagueResponse;
 import com.moayong.api.domain.leaguemember.domain.LeagueMember;
 import com.moayong.api.domain.leaguemember.dto.response.LeagueMemberResponse;
-import com.moayong.api.domain.leaguemember.dto.response.MemberRankingResponse;
-import com.moayong.api.domain.leaguemember.dto.service.MemberRankingServiceDto;
 import com.moayong.api.domain.leaguemember.service.LeagueMemberService;
 import com.moayong.api.global.api.ApiResponse;
 import lombok.RequiredArgsConstructor;

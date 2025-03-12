@@ -1,7 +1,6 @@
 package com.moayong.api.domain.league.dto.response;
 
 import com.moayong.api.domain.league.domain.League;
-import com.moayong.api.domain.league.enums.Tier;
 
 public record LeagueResponse (
         Long id,

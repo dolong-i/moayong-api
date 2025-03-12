@@ -1,11 +1,9 @@
 package com.moayong.api.domain.leaguemember.controller;
 
-import com.moayong.api.domain.auth.service.AuthService;
 import com.moayong.api.domain.leaguemember.domain.LeagueMember;
-import com.moayong.api.domain.leaguemember.dto.response.LeagueMemberResponse;
+import com.moayong.api.domain.leaguemember.dto.response.MatchInfoResponse;
 import com.moayong.api.domain.leaguemember.dto.service.MatchInfoServiceDto;
 import com.moayong.api.domain.leaguemember.service.LeagueMatchService;
-import com.moayong.api.domain.leaguemember.dto.response.MatchInfoResponse;
 import com.moayong.api.global.api.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

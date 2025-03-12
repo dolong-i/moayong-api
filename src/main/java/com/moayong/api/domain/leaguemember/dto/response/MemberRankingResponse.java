@@ -1,6 +1,5 @@
 package com.moayong.api.domain.leaguemember.dto.response;
 
-import com.moayong.api.domain.leaguemember.domain.LeagueMember;
 import com.moayong.api.domain.leaguemember.enums.PromotionStatus;
 import lombok.Builder;
 

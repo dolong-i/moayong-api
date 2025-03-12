@@ -1,11 +1,8 @@
 package com.moayong.api.domain.season.controller;
 
-import com.moayong.api.domain.league.dto.response.LeagueResponse;
 import com.moayong.api.domain.season.domain.Season;
 import com.moayong.api.domain.season.dto.request.SeasonSaveRequest;
 import com.moayong.api.domain.season.dto.response.SeasonResponse;
-import com.moayong.api.domain.season.enums.SeasonErrorCode;
-import com.moayong.api.domain.season.exception.SeasonException;
 import com.moayong.api.domain.season.service.SeasonService;
 import com.moayong.api.global.api.ApiResponse;
 import jakarta.validation.Valid;

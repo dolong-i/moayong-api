@@ -1,6 +1,5 @@
 package com.moayong.api.domain.memberquiz.service;
 
-import com.moayong.api.domain.leaguemember.domain.LeagueMember;
 import com.moayong.api.domain.leaguemember.service.LeagueMemberService;
 import com.moayong.api.domain.memberquiz.domain.MemberQuiz;
 import com.moayong.api.domain.memberquiz.domain.UserDailyQuiz;

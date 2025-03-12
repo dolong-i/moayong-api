@@ -1,7 +1,5 @@
 package com.moayong.api.domain.leaguemember.enums;
 
-import com.moayong.api.domain.league.domain.League;
-
 public enum PromotionStatus {
     PROMOTION, RELEGATION, SUSPENDED;
 
