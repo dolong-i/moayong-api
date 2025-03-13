@@ -66,6 +66,7 @@ public class LeagueMatchService {
 
         return MatchInfoServiceDto.builder()
                 .memberId(prevMember.getId())
+                .leagueId(prevMember.getLeagueId())
                 .totalScore(prevMember.getTotalScore())
                 .goalAmount(prevMember.getGoalAmount())
                 .rank(rank)

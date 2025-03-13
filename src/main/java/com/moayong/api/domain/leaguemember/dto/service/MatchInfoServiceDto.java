@@ -18,6 +18,7 @@ public record MatchInfoServiceDto(
     public MatchInfoResponse toResponse() {
         return MatchInfoResponse.builder()
                 .memberId(memberId)
+                .leagueId(leagueId)
                 .totalScore(totalScore)
                 .goalAmount(goalAmount)
                 .rank(rank)
