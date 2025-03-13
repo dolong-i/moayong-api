@@ -7,10 +7,7 @@ import com.moayong.api.domain.auth.enums.Role;
 import com.moayong.api.domain.user.enums.SavingsBank;
 import com.moayong.api.global.entity.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 
@@ -38,22 +35,27 @@ public class User extends BaseEntity {
     @Column(name = "name")
     private String name;
 
+    @Setter
     @Column(name = "nickname")
     private String nickname;
 
     @Column(name = "email")
     private String email;
 
+    @Setter
     @Column(name = "monthly_salary")
     private Integer monthlySalary;
 
+    @Setter
     @Column(name = "savings_rate")
     private Integer savingsRate;
 
+    @Setter
     @Enumerated(EnumType.STRING)
     @Column(name = "savings_bank")
     private SavingsBank savingsBank;
 
+    @Setter
     @Column(name = "account_number")
     private String accountNumber;
 
