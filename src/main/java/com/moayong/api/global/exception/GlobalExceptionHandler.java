@@ -50,7 +50,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(NoResourceFoundException.class)
     public ResponseEntity<ApiResponse<?>> handleNotFound(NoResourceFoundException ex) {
-        log.info("handleNot found: {}", ex.getMessage(), ex);
+        log.info("handleNot found: {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(ApiResponse.error(String.valueOf(HttpStatus.NOT_FOUND.value()), "존재하지 않는 경로입니다."));
     }
