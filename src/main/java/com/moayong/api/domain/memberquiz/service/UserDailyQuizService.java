@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,7 +33,9 @@ public class UserDailyQuizService {
     }
 
     private long getTtlUntilNext9AM() {
-        LocalDateTime now = LocalDateTime.now();
+        ZoneId zoneId = ZoneId.of("Asia/Seoul");
+        ZonedDateTime zonedDateTime = ZonedDateTime.now(zoneId);
+        LocalDateTime now = zonedDateTime.toLocalDateTime();
         LocalDateTime next9AM = now.withHour(9).withMinute(0).withSecond(0).withNano(0);
         if (!now.isBefore(next9AM)) {
             next9AM = next9AM.plusDays(1);
