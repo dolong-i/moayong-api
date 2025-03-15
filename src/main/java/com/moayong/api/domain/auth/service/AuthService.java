@@ -10,7 +10,7 @@ import com.moayong.api.domain.auth.oauth2.userinfo.OAuth2UserInfo;
 import com.moayong.api.domain.auth.repository.UserTemporaryRepository;
 import com.moayong.api.domain.leaguemember.service.LeagueMatchService;
 import com.moayong.api.domain.user.domain.User;
-import com.moayong.api.domain.user.service.UserService;
+import com.moayong.api.domain.user.service.UserCommandService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +22,7 @@ import java.util.Map;
 public class AuthService {
     private final UserTemporaryRepository userTemporaryRepository;
     private final JwtTokenService tokenService;
-    private final UserService userService;
+    private final UserCommandService userCommandService;
     private final LeagueMatchService matchService;
 
     public UserTemporary findUserTemporaryById(String id) {
@@ -38,7 +38,7 @@ public class AuthService {
         userTemporaryRepository.deleteById(userTemporaryId);
 
         // 유저 저장
-        User user = userService.saveFromTemporary(userTemporary, onboardingServiceDto);
+        User user = userCommandService.saveFromTemporary(userTemporary, onboardingServiceDto);
 
         // 가장 낮은 리그 매칭 후 저장
         matchService.matchUserToLeagueByLevel(user, 1);
