@@ -61,6 +61,7 @@ public class LeagueMemberRepositoryCustomImpl implements LeagueMemberRepositoryC
                 .from(leagueMember)
                 .join(user).on(leagueMember.userId.eq(user.id)) // userId와 user.id JOIN
                 .where(leagueMember.leagueId.eq(leagueId))
+                .orderBy(leagueMember.totalScore.desc()) // 총점 내림차순 정렬
                 .fetch();
     }
 }
