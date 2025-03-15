@@ -109,7 +109,16 @@ record QuizSaveRequest(
 
         @JsonProperty("finance_description")
         @NotBlank(message = "금융정보 설명은 빈 값일 수 없습니다.")
-        String financeDescription
+        String financeDescription,
+
+        @JsonProperty("source_title")
+        @NotBlank(message = "출처 제목은 빈 값일 수 없습니다.")
+        String sourceTitle,
+
+        @JsonProperty("source_link")
+        @NotBlank(message = "출처 링크는 빈 값일 수 없습니다.")
+        String sourceLink
+
 ) {
     public Quiz toEntity() {
         return Quiz.builder()
@@ -119,6 +128,8 @@ record QuizSaveRequest(
                 .problemOptions(problemOptions)
                 .answerNumber(answerNumber)
                 .answerDescription(answerDescription)
+                .sourceTitle(sourceTitle)
+                .sourceLink(sourceLink)
                 .build();
     }
 }

@@ -23,29 +23,37 @@ public class Quiz extends BaseEntity {
     @Column(name = "finance_title", nullable = false)
     private String financeTitle;
 
-    @Column(name = "finance_description", nullable = false)
+    @Column(name = "finance_description", nullable = false, columnDefinition = "TEXT")
     private String financeDescription;
 
     @Column(name = "problem_title", nullable = false)
     private String problemTitle;
 
-    @Column(name = "problem_options", nullable = false)
+    @Column(name = "problem_options", nullable = false, columnDefinition = "TEXT")
     @Convert(converter = OptionsConverter.class)
     public List<String> problemOptions;
 
     @Column(name = "answer_number", nullable = false)
     private Integer answerNumber;
 
-    @Column(name = "answer_description", nullable = false)
+    @Column(name = "answer_description", nullable = false, columnDefinition = "TEXT")
     private String answerDescription;
 
+    @Column(name = "source_title", nullable = false)
+    private String sourceTitle;
+
+    @Column(name = "source_link", nullable = false)
+    private String sourceLink;
+
     @Builder
-    public Quiz(String financeTitle, String financeDescription, String problemTitle, List<String> problemOptions, Integer answerNumber, String answerDescription) {
+    public Quiz(String financeTitle, String financeDescription, String problemTitle, List<String> problemOptions, Integer answerNumber, String answerDescription, String sourceTitle, String sourceLink) {
         this.financeTitle = financeTitle;
         this.financeDescription = financeDescription;
         this.problemTitle = problemTitle;
         this.problemOptions = problemOptions;
         this.answerNumber = answerNumber;
         this.answerDescription = answerDescription;
+        this.sourceTitle = sourceTitle;
+        this.sourceLink = sourceLink;
     }
 }

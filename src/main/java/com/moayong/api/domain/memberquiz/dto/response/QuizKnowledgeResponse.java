@@ -5,13 +5,17 @@ import com.moayong.api.domain.quiz.domain.Quiz;
 public record QuizKnowledgeResponse(
         Long id,
         String financeTitle,
-        String financeDescription
+        String financeDescription,
+        String sourceTitle,
+        String sourceLink
 ) {
     public QuizKnowledgeResponse(Quiz quiz) {
         this(
                 quiz.getId(),
                 quiz.getFinanceTitle(),
-                quiz.getFinanceDescription()
+                quiz.getFinanceDescription(),
+                quiz.getSourceTitle(),
+                quiz.getSourceLink()
         );
     }
 }

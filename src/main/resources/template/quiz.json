@@ -5,7 +5,9 @@
     "problem_title": "원금뿐만 아니라 발생한 이자에도 이자가 붙는 효과는?",
     "answer_description": "복리는 시간이 지날수록 이자가 기하급수적으로 증가하는 특징이 있습니다. 장기 투자 시 복리 효과를 활용하면 높은 수익을 기대할 수 있습니다.",
     "problem_options": ["단리 이자", "복리 이자", "정기 예금"],
-    "answer_number": 2
+    "answer_number": 2,
+    "source_title": "출처입니다",
+    "source_link": "sample-link.com"
   },
   {
     "finance_title": "신용 점수",
@@ -13,7 +15,9 @@
     "problem_title": "은행이 대출 승인 여부를 결정할 때 가장 중요하게 고려하는 점수는?",
     "answer_description": "신용 점수는 대출 상환 이력, 신용카드 사용 패턴 등을 종합적으로 평가하여 산정됩니다. 높은 신용 점수를 유지하면 낮은 금리로 대출을 받을 수 있습니다.",
     "problem_options": ["신용 점수", "예금 금리", "주식 평가액"],
-    "answer_number": 1
+    "answer_number": 1,
+    "source_title": "출처입니다",
+    "source_link": "sample-link.com"
   },
   {
     "finance_title": "ETF",
@@ -21,6 +25,8 @@
     "problem_title": "여러 종목을 포함하면서도 주식처럼 거래할 수 있는 금융 상품은?",
     "answer_description": "ETF는 특정 지수를 추종하며 주식처럼 자유롭게 매매할 수 있는 장점이 있습니다. 적은 금액으로도 분산 투자가 가능하여 초보 투자자에게 적합한 상품입니다.",
     "problem_options": ["ETF", "정기예금", "국채"],
-    "answer_number": 1
+    "answer_number": 1,
+    "source_title": "출처입니다",
+    "source_link": "sample-link.com"
   }
 ]
