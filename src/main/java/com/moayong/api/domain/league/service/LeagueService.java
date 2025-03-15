@@ -46,7 +46,7 @@ public class LeagueService {
         return leagueRepository.findAll();
     }
 
-    public Integer getNextLevel(League league, int rate) {
+    public Integer getNextLevel(League league, float rate) {
         int level = league.getLevel();
 
         if (rate <= league.getPromotionRate()) return level + 1;

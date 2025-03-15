@@ -60,7 +60,7 @@ public class LeagueMatchService {
         List<LeagueMember> leagueMembers = memberService.findByLeagueIdOrderByScore(prevLeague.getId());
 
         Integer rank = memberService.getRank(leagueMembers, prevMember.getId());
-        Integer rate = memberService.getRate(leagueMembers.size(), rank);
+        Float rate = memberService.getRate(leagueMembers.size(), rank);
         Integer nextLevel = leagueService.getNextLevel(prevLeague, rate);
         PromotionStatus promotionStatus = PromotionStatus.getStatus(prevLeague.getLevel(), nextLevel);
 
