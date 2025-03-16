@@ -76,10 +76,10 @@ public class LeagueMemberService {
         memberRepository.updateStatusByCurrentStatus(LeagueMemberStatus.ACTIVE, LeagueMemberStatus.INACTIVE);
     }
 
-    public Float getRate(Integer total, Integer rank) {
-        if (total < 3) return 50.0f;
+    public Integer getRate(Integer total, Integer rank) {
+        if (total < 3) return 50;
 
-        float rate = ((float) rank / total) * 100;
-        return Math.round(rate * 10) / 10.0f;
+        float rate = ((float) rank / (float) total) * 100;
+        return Math.round(rate);
     }
 }

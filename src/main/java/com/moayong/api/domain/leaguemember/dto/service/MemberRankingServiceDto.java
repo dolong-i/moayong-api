@@ -11,7 +11,7 @@ public record MemberRankingServiceDto(
         String nickname,
         PromotionStatus promotionStatus,
         Integer rank,
-        Float rate,
+        Integer rate,
         Integer totalScore
 ){
     public MemberRankingResponse toResponse() {

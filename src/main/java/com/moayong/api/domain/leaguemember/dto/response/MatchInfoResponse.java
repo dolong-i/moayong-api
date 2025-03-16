@@ -10,7 +10,7 @@ public record MatchInfoResponse (
         Integer totalScore,
         Integer goalAmount,
         Integer rank,
-        Float rate,
+        Integer rate,
         Integer nextLevel,
         PromotionStatus promotionStatus
 ){

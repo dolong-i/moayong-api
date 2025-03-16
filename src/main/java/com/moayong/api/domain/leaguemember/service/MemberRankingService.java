@@ -45,7 +45,7 @@ public class MemberRankingService {
                 .map(memberWithNickname -> {
                     LeagueMember member = memberWithNickname.leagueMember();
                     Integer rank = memberService.getRank(members, member.getId());
-                    Float rate = memberService.getRate(members.size(), rank);
+                    Integer rate = memberService.getRate(members.size(), rank);
                     Integer nextLevel = leagueService.getNextLevel(league, rate);
                     PromotionStatus promotionStatus = PromotionStatus.getStatus(league.getLevel(), nextLevel);
 

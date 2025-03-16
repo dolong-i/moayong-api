@@ -11,7 +11,7 @@ public record MatchInfoServiceDto(
         Integer totalScore,
         Integer goalAmount,
         Integer rank,
-        Float rate,
+        Integer rate,
         Integer nextLevel,
         PromotionStatus promotionStatus
 ){

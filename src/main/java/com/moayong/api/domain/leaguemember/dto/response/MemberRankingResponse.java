@@ -10,7 +10,7 @@ public record MemberRankingResponse (
         String nickname,
         PromotionStatus promotionStatus,
         Integer rank,
-        Float rate,
+        Integer rate,
         Integer totalScore
 ){
 }
