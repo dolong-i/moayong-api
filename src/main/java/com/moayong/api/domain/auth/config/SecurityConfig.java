@@ -46,7 +46,7 @@ public class SecurityConfig {
                 .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/api/v1/auth/authorize", "/login/oauth2/code/*").permitAll()
+                        .requestMatchers("/api/v1/auth/authorize**", "/login/oauth2/code/*").permitAll()
                         .requestMatchers("/api/v1/leagues/**").permitAll()
                         .requestMatchers("/api/v1/seasons/**").permitAll()
                         .requestMatchers("/api/v1/auth/refresh").permitAll()
