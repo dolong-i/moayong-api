@@ -40,4 +40,33 @@ public class SavingsRepositoryCustomImpl implements SavingsRepositoryCustom {
 
         return totalAmount != null ? totalAmount : 0;
     }
+
+
+    @Override
+    public Integer findSavingsTotalScoreByLeagueMemberId(Long leagueMemberId) {
+        QSavings qSavings = QSavings.savings;
+        QLeagueMember qLeagueMember = QLeagueMember.leagueMember;
+
+        Integer totalScore = queryFactory
+                .select(qSavings.score.sum().coalesce(0))
+                .from(qSavings)
+                .where(qSavings.leagueMemberId.eq(leagueMemberId))
+                .fetchOne();
+
+        return totalScore != null ? totalScore : 0;
+    }
+
+    @Override
+    public Integer findSavingsTotalAmountByLeagueMemberId(Long leagueMemberId) {
+        QSavings qSavings = QSavings.savings;
+        QLeagueMember qLeagueMember = QLeagueMember.leagueMember;
+
+        Integer totalAmount = queryFactory
+                .select(qSavings.amount.sum().coalesce(0))
+                .from(qSavings)
+                .where(qSavings.leagueMemberId.eq(leagueMemberId))
+                .fetchOne();
+
+        return totalAmount != null ? totalAmount : 0;
+    }
 }

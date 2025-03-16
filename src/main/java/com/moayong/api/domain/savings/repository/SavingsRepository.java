@@ -7,6 +7,4 @@ import java.util.List;
 
 public interface SavingsRepository extends JpaRepository<Savings, Long>, SavingsRepositoryCustom {
     List<Savings> findByLeagueMemberId(Long memberId);
-    Integer findSavingsTotalScoreByLeagueMemberId(Long leagueMemberId);
-    Integer findSavingsTotalAmountByLeagueMemberId(Long leagueMemberId);
 }

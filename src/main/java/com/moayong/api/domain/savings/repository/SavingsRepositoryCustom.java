@@ -7,4 +7,6 @@ import java.util.List;
 public interface SavingsRepositoryCustom {
     List<Savings> findByUserId(Long userId);
     Integer findSavingsTotalAmountByUserId(Long userId);
+    Integer findSavingsTotalScoreByLeagueMemberId(Long leagueMemberId);
+    Integer findSavingsTotalAmountByLeagueMemberId(Long leagueMemberId);
 }
