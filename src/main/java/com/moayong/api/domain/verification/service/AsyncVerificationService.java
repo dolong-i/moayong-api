@@ -25,7 +25,7 @@ public class AsyncVerificationService {
             verification.uploadImage(imageUrl);
             verificationRepository.save(verification);
 
-            String extractedText = ocrService.extractTextFromImage(fileBytes);
+            String extractedText = ocrService.extractTextFromImage(fileBytes, verification.getBank());
             verification.processOCR(extractedText);
 
             verificationRepository.save(verification);

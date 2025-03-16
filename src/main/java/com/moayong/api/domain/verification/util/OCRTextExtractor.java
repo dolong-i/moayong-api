@@ -21,6 +21,7 @@ public class OCRTextExtractor {
     public AccountServiceDto extractAccount(SavingsBank bank, String text) {
         return switch (bank) {
             case HANA -> extractHanaBankAccount(text);
+            case KAKAO_BANK -> extractKakaoBankAccount(text);
             default -> throw new VerificationException(VerificationErrorCode.UNSUPPORTED_BANK);
         };
     }
@@ -28,6 +29,7 @@ public class OCRTextExtractor {
     public PaymentServiceDto extractPayment(SavingsBank bank, String text) {
         return switch (bank) {
             case HANA -> extractHanaBankPayment(text);
+            case KAKAO_BANK -> extractKakaoBankPayment(text);
             default -> throw new VerificationException(VerificationErrorCode.UNSUPPORTED_BANK);
         };
     }
@@ -58,7 +60,7 @@ public class OCRTextExtractor {
             Pattern namePattern = Pattern.compile("거래내역상세.*\\n.*\\n(.*)\\n");
             Pattern datePattern = Pattern.compile("거래일시\\s+(.*)");
             Pattern amountPattern = Pattern.compile("거래금액\\s+(.*)원");
-            Pattern balancePattern = Pattern.compile("거래후잔액\\s+(.*)원");
+            Pattern balancePattern = Pattern.compile("잔액\\s+(.*)원");
 
             // 데이터 추출
             String name = extractMatch(namePattern, text);
@@ -69,7 +71,6 @@ public class OCRTextExtractor {
             // 날짜 변환
             LocalDateTime date = null;
             if (dateStr != null) {
-                dateStr = dateStr.replace("/", ""); // "20:0/7:29" 처리
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss");
                 date = LocalDateTime.parse(dateStr, formatter);
             }
@@ -91,6 +92,68 @@ public class OCRTextExtractor {
             throw new VerificationException(VerificationErrorCode.PAYMENT_TEXT_EXTRACT_FAILURE);
         }
     }
+
+    public AccountServiceDto extractKakaoBankAccount(String text) {
+        try {
+            Pattern accountNumberPattern = Pattern.compile("(.*-.*-.*)");
+            Pattern balancePattern = Pattern.compile("(.*)원\\n.*\\n.*채우기");
+
+            // 데이터 추출
+            String accountNumber = Objects.requireNonNull(extractMatch(accountNumberPattern, text)).trim();
+            String balanceStr = Objects.requireNonNull(extractMatch(balancePattern, text)).trim();
+
+            return AccountServiceDto.builder()
+                    .accountNumber(accountNumber)
+                    .accountBalance(getOnlyNumbersFromText(balanceStr))
+                    .build();
+        } catch (Exception e) {
+            log.info(e.getMessage());
+            throw new VerificationException(VerificationErrorCode.ACCOUNT_TEXT_EXTRACT_FAILURE);
+        }
+    }
+
+    public PaymentServiceDto extractKakaoBankPayment(String text) {
+        try {
+            // 정규식 패턴 정의
+            Pattern namePattern = Pattern.compile("'(.*)'");
+            Pattern datePattern = Pattern.compile("거래시각\\s+(.*)");
+            Pattern amountPattern = Pattern.compile("거래금액\\s+(.*)원");
+            Pattern balancePattern = Pattern.compile("잔액\\s+(.*)원");
+            Pattern typePattern = Pattern.compile("거래구분\\s+(.*)");
+
+            // 데이터 추출
+            String name = extractMatch(namePattern, text);
+            String dateStr = extractMatch(datePattern, text);
+            String amountStr = extractMatch(amountPattern, text);
+            String balanceStr = extractMatch(balancePattern, text);
+            String typeStr = extractMatch(typePattern, text);
+
+            // 날짜 변환
+            LocalDateTime date = null;
+            if (dateStr != null) {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss");
+                date = LocalDateTime.parse(dateStr, formatter);
+            }
+
+            TransactionType transactionType = Objects.requireNonNull(typeStr)
+                    .contains("+")
+                    ? TransactionType.DEPOSIT
+                    : TransactionType.WITHDRAW;
+
+            return PaymentServiceDto.builder()
+                    .name(name)
+                    .type(transactionType)
+                    .date(date)
+                    .amount(getOnlyNumbersFromText(amountStr))
+                    .balance(getOnlyNumbersFromText(Objects.requireNonNull(balanceStr)))
+                    .build();
+        } catch (Exception e) {
+            log.info(e.getMessage());
+            throw new VerificationException(VerificationErrorCode.PAYMENT_TEXT_EXTRACT_FAILURE);
+        }
+    }
+
+
 
     private Integer getOnlyNumbersFromText(String text) {
         return Integer.parseInt(text.replaceAll("[^0-9]", ""));

@@ -18,8 +18,8 @@ public class TesseractConfig {
         String os = System.getProperty("os.name").toLowerCase();
 
         tesseract.setDatapath(getTessDatapath(os));
-        tesseract.setLanguage("kor");  // 한글 OCR 지원
-        tesseract.setPageSegMode(6);  // 문서 자동 분석
+        tesseract.setLanguage("kor");
+        tesseract.setPageSegMode(6);
 
         // 네이티브 라이브러리 경로 설정
         if (os.contains("mac")) {
