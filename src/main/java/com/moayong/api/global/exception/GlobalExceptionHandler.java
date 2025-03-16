@@ -50,7 +50,6 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(NoResourceFoundException.class)
     public ResponseEntity<ApiResponse<?>> handleNotFound(NoResourceFoundException ex) {
-        log.info("handleNot found: {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(ApiResponse.error(String.valueOf(HttpStatus.NOT_FOUND.value()), "존재하지 않는 경로입니다."));
     }
@@ -70,7 +69,7 @@ public class GlobalExceptionHandler {
     // 도메인별 세부 예외 처리
     @ExceptionHandler(DomainSpecificException.class)
     public ResponseEntity<ApiResponse<?>> handleDomainSpecificException(DomainSpecificException ex) {
-        log.info(ex.getLogMessage(), ex);
+        log.info(ex.getLogMessage());
 
         return ResponseEntity.status(ex.getStatus())
                 .body(ApiResponse.error(ex.getCode(), ex.getErrorData(), ex.getMessage()));
