@@ -49,8 +49,8 @@ public class LeagueService {
     public Integer getNextLevel(League league, float rate) {
         int level = league.getLevel();
 
-        if (rate <= league.getPromotionRate()) return level + 1;
-        if (rate > league.getRelegationRate()) return level - 1;
+        if (rate <= (float) league.getPromotionRate()) return level + 1;
+        if (rate > (float) league.getRelegationRate()) return level - 1;
 
         return level;
     }
