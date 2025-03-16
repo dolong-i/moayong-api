@@ -6,11 +6,10 @@ import java.util.Arrays;
 
 @Getter
 public enum Tier {
-    BRONZE(1, "브론즈", "bronze.png", 30, 70),
-    SILVER(2, "실버", "silver.png", 30, 70),
-    GOLD(3, "골드", "gold.png", 30, 70),
-    PLATINUM(4, "플레", "platinum.png", 30, 70),
-    DIAMOND(5, "다이아", "diamond.png", 30, 70);
+    BRONZE(1, "아가용", "https://d3t251u9x9cmf6.cloudfront.net/egg.png", 60, 101),
+    SILVER(2, "초딩용", "https://d3t251u9x9cmf6.cloudfront.net/baby-dragon.png", 30, 90),
+    GOLD(3, "중딩용", "https://d3t251u9x9cmf6.cloudfront.net/child-dragon.png", 20, 80),
+    PLATINUM(4, "고딩용", "https://d3t251u9x9cmf6.cloudfront.net/youth-dragon.png", 0, 60);
 
     private final int level;
     private final String name;
