@@ -13,6 +13,7 @@ import com.moayong.api.domain.user.domain.User;
 import com.moayong.api.domain.user.service.UserService;
 import com.moayong.api.domain.verification.enums.TransactionType;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +21,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class SavingsService {
@@ -85,15 +87,15 @@ public class SavingsService {
     }
 
     private Integer getScore(LeagueMember member, SavingsServiceDto serviceDto) {
-        Integer totalScore = member.getTotalScore();
+        Integer maxScore = SavingsPolicy.MAX_SCORE.getValue();
         Integer nowScore = findSavingsTotalScoreByMemberId(member.getId());
-        if (nowScore >= totalScore) {
+        if (nowScore >= maxScore) {
             return 0;
         }
 
-        Integer maxScore = SavingsPolicy.MAX_SCORE.getValue();
         Integer goalAmount = member.getGoalAmount();
-        Integer savingsScore = goalAmount / serviceDto.amount() * maxScore;
+        Float savingsRate = (float) serviceDto.amount() / (float) goalAmount;
+        Integer savingsScore = Math.round(savingsRate * maxScore);
 
         if (nowScore + savingsScore >= maxScore) {
             return maxScore - nowScore;
