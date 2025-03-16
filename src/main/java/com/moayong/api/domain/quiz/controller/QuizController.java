@@ -5,10 +5,7 @@ import com.moayong.api.domain.quiz.dto.response.QuizResponse;
 import com.moayong.api.domain.quiz.service.QuizService;
 import com.moayong.api.global.api.ApiResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
@@ -24,4 +21,10 @@ public class QuizController {
         return ApiResponse.success(quizResponse, "퀴즈 단건 조회 성공");
     }
 
+    @PostMapping("/quizzes")
+    public ApiResponse<Void> save() {
+        quizService.saveQuizzes();
+
+        return ApiResponse.success(null, "퀴즈 생성 성공");
+    }
 }

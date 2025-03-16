@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface QuizRepository extends JpaRepository<Quiz, Long>, QuizRepositoryCustom {
     List<Quiz> findAllByIdNotIn(List<Long> ids);
+
+    List<Quiz> findAllByFinanceTitleIn(List<String> financeTitles);
 }
