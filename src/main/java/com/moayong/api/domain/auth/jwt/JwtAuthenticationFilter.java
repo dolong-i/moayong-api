@@ -24,6 +24,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 
 @Slf4j
 @Component
@@ -40,7 +41,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         String requestURI = request.getRequestURI();
         // 토큰 검증을 건너뛰기
-        if (requestURI.startsWith("/api/v1/auth/refresh")) {
+        List<String> excludeUrls = List.of(
+                "/api/v1/auth/refresh",
+                "/api/v1/auth/logout",
+                "/api/v1/auth/authorize"
+        );
+
+        if (excludeUrls.stream().anyMatch(requestURI::startsWith)) {
             filterChain.doFilter(request, response);
             return;
         }
