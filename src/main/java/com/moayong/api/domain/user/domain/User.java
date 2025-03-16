@@ -93,6 +93,6 @@ public class User extends BaseEntity {
     }
 
     public Integer getGoalAmount() {
-        return this.getMonthlySalary() * this.getMonthlySalary() / 100;
+        return monthlySalary * savingsRate / 100;
     }
 }
