@@ -35,17 +35,16 @@ public class OCRTextExtractor {
 
     public AccountServiceDto extractHanaBankAccount(String text) {
         try {
-            log.info("Extracting HANA bank account: {}", text);
-            String[] sentences = text.split("\n");
+            Pattern accountNumberPattern = Pattern.compile("(.*)\\n.*\\n출금가능금액");
+            Pattern balancePattern = Pattern.compile("(.*)\\n출금가능금액");
 
-            String accountNumber = sentences[4].trim();
-            String balanceText = sentences[5].trim();
-
-            Integer balance = getOnlyNumbersFromText(balanceText);
+            // 데이터 추출
+            String accountNumber = Objects.requireNonNull(extractMatch(accountNumberPattern, text)).trim();
+            String balanceStr = Objects.requireNonNull(extractMatch(balancePattern, text)).trim();
 
             return AccountServiceDto.builder()
                     .accountNumber(accountNumber)
-                    .accountBalance(balance)
+                    .accountBalance(getOnlyNumbersFromText(balanceStr))
                     .build();
         } catch (Exception e) {
             log.info(e.getMessage());
@@ -59,7 +58,7 @@ public class OCRTextExtractor {
             Pattern namePattern = Pattern.compile("거래내역상세.*\\n.*\\n(.*)\\n");
             Pattern datePattern = Pattern.compile("거래일시\\s+(.*)");
             Pattern amountPattern = Pattern.compile("거래금액\\s+(.*)원");
-            Pattern balancePattern = Pattern.compile("거래후잔액\\s+(.*) 원");
+            Pattern balancePattern = Pattern.compile("거래후잔액\\s+(.*)원");
 
             // 데이터 추출
             String name = extractMatch(namePattern, text);

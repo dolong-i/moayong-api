@@ -18,7 +18,6 @@ public class AsyncVerificationService {
     @Async("asyncVerificationExecutor")
     public void verifyImage(Verification verification, byte[] fileBytes, String originalFilename) {
         try {
-            log.info("::::::Thread Name : " + Thread.currentThread().getName());
             verification.startTask();
             verificationRepository.save(verification);
 
