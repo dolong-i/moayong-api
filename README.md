@@ -35,7 +35,7 @@
 ### 회원 관련 기능
 |         소셜 로그인          |          온보딩          |            메인            |
 |:-------------------------:|:-----------------------:|:---------------------:|
-| ![회원가입](introduction/pages/소셜로그인.png) | ![로그인](introduction/pages/온보딩.png) | ![메인](introduction/pages/메인.png) | 
+| ![소셜로그인](introduction/pages/소셜로그인.png) | ![온보딩](introduction/pages/온보딩.png) | ![메인](introduction/pages/메인.png) | 
 
 - **OAuth2 로그인 (Spring Security 적용)**
 - **JWT + Secure 쿠키 사용**
@@ -71,7 +71,7 @@
 ---
 
 ## 3. ERD
-![ERD](introduction/backend/ERD)
+![ERD](introduction/backend/ERD.png)
 - **시즌 시작 시 티어 기반 리그 생성**
 - **이전 시즌 CLOSE 처리, 리그멤버 상태 업데이트**
 - **새 시즌 시작 시 새로운 리그 자동 매칭**
@@ -80,7 +80,7 @@
 ---
 
 ## 4. API 서버 관리
-![서버아키텍처](introduction/backend/서버아키텍처)
+![서버아키텍처](introduction/backend/서버아키텍처.png)
 - **EC2-1 (운영 서버)**: Docker Compose로 Spring Boot, Redis, MySQL, Nginx 실행
 - **EC2-2 (Jenkins CI/CD 서버)**: 자동 빌드 및 배포
 - **S3 + CloudFront**: 이미지 저장 및 배포
