@@ -80,7 +80,7 @@
 ---
 
 ## 4. API 서버 관리
-![서버아키텍처](introduction/backend/서버아키텍처.png)
+![서버아키텍처](introduction/backend/서버아키텍처.png)
 - **EC2-1 (운영 서버)**: Docker Compose로 Spring Boot, Redis, MySQL, Nginx 실행
 - **EC2-2 (Jenkins CI/CD 서버)**: 자동 빌드 및 배포
 - **S3 + CloudFront**: 이미지 저장 및 배포
