@@ -91,11 +91,16 @@
 - **Blue-Green 무중단 배포**
 
 ### 배포 플로우
-1. 개발자가 Github main branch에 코드 push
-2. Jenkins가 변경 감지 후 빌드 & Docker 이미지 생성
-3. Docker Hub에 Push 후 EC2-1에서 Green 컨테이너 실행
-4. Nginx가 트래픽을 기존 Blue → Green으로 변경
-5. 문제 없으면 기존 Blue 컨테이너 종료
+현재 운영서버 (EC2-1) 에서 Blue 컨테이너가 실행중
+1. 개발자가 Github main branch 에 코드 push
+2. github webhook을 이용해 Jenkins (EC2-2)가 변경 감지
+3. Jenkins (EC2-2)가 변경 감지 후 빌드 & Docker 이미지 생성
+4. Jenkins (EC2-2)가 생성된 이미지를 Docker Hub에 Push
+5. Jenkins (EC2-2)가 EC2-1에서 Green 컨테이너 실행
+6. Green 컨테이너가 Docker Hub에서 최신 이미지 Pull 후 실행
+7. Nginx가 트래픽을 기존 Blue → Green으로 변경
+8. 문제없으면 기존 Blue 컨테이너 종료, 롤백 필요 시 다시 Blue로 전환
+
 [📌 자세한 설정 및 코드](https://plain-cotija-223.notion.site/1a1d4a0c12da80f5aa25fd9ebd5c9626?pvs=4)
 
 ---
@@ -107,10 +112,10 @@
 
 ## 6. 팀원 및 역할
 - **팀장:** 이태형 (백엔드)
-- **부팀장:** 이수연 (디자인)
+- **부팀장:** 유혜지 (디자인)
 - **PM:** 이수연, 안소현
-- **디자인:** 권가은
-- **백엔드:** 강문영
+- **디자인:** 유혜지, 권가은
+- **백엔드:** 이태형, 강문영
 - **프론트엔드:** 최석호
 
 ---
