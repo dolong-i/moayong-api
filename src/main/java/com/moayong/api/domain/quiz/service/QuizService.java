@@ -21,11 +21,11 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class QuizService {
     private final QuizRepository quizRepository;
-
+    private final ObjectMapper mapper;
     public void saveQuizzes() {
         try {
             Resource resource = new ClassPathResource("template/quiz.json"); // 퀴즈 파일 저장 위치
-            ObjectMapper mapper = new ObjectMapper();
+
             QuizSaveDto[] quizSaveDTOS = mapper.readValue(resource.getInputStream(), QuizSaveDto[].class);
             List<QuizSaveDto> quizList = Arrays.asList(quizSaveDTOS);
 
