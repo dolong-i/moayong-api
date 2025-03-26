@@ -8,12 +8,16 @@ import com.moayong.api.domain.user.enums.SavingsBank;
 import com.moayong.api.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.SQLDelete;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.time.LocalDateTime;
 
 
 @EntityListeners(AuditingEntityListener.class)
 @Entity
 @Getter
+@SQLDelete(sql = "UPDATE user SET deleted_at = NOW() WHERE id = ?")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends BaseEntity {
     @Id
@@ -59,6 +63,9 @@ public class User extends BaseEntity {
     @Column(name = "account_number")
     private String accountNumber;
 
+    @Setter
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
 
     @Builder
     public User(AuthProvider provider, String providerId, Role role, String email, String name, String nickname,

@@ -26,6 +26,11 @@ public class UserService {
                 .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND, Map.of("id", id)));
     }
 
+    public User findActiveUserById(Long id) {
+        return userRepository.findByIdAndDeletedAtIsNull(id)
+                .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND, Map.of("id", id)));
+    }
+
     public Optional<User> findUserByIdOptional(Long id) {
         return userRepository.findById(id);
     }
@@ -34,9 +39,8 @@ public class UserService {
         return userRepository.findByProviderAndProviderId(provider, providerId);
     }
 
-
     public void checkDuplicateNickname(String nickname) {
-        boolean isDuplicated = userRepository.findByNickname(nickname).isPresent();
+        boolean isDuplicated = userRepository.findByNicknameAndDeletedAtIsNull(nickname).isPresent();
         if (isDuplicated) {
             throw new UserException(UserErrorCode.DUPLICATED_NICKNAME);
         }

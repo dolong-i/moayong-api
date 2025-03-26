@@ -25,7 +25,7 @@ public class UserCommandService {
 
     @Transactional
     public User updateUserInfo(Long id, User user) {
-        User userEntity = userService.findUserById(id);
+        User userEntity = userService.findActiveUserById(id);
         userEntity.setNickname(user.getNickname());
         userEntity.setMonthlySalary(user.getMonthlySalary());
         userEntity.setSavingsRate(user.getSavingsRate());
@@ -35,7 +35,7 @@ public class UserCommandService {
 
     @Transactional
     public User updateUserAccount(Long id, UserUpdateServiceDto dto) {
-        User user = userService.findUserById(id);
+        User user = userService.findActiveUserById(id);
 
         Integer prevSavingsAmount = savingsService.findSavingsTotalAmountByUserId(id);
         if (!dto.savingsAmount().equals(prevSavingsAmount)) {
@@ -49,9 +49,8 @@ public class UserCommandService {
     }
 
     public void deleteUser(Long id) {
-        User user = userService.findUserById(id);
+        User user = userService.findActiveUserById(id);
 
-        // TODO hard delete 할지 아니면 익명화할지 정해야함
         userRepository.delete(user);
     }
 }

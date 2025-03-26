@@ -37,7 +37,7 @@ public class UserController {
     @GetMapping("/users/me")
     public ApiResponse<UserResponse> findCurrentUser(@AuthenticationPrincipal UserPrincipal principal) {
         Long id = Long.valueOf(principal.getUserId());
-        User user = userService.findUserById(id);
+        User user = userService.findActiveUserById(id);
         UserResponse response = new UserResponse(user);
 
         return ApiResponse.success(response, "유저 조회 성공");
