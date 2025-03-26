@@ -9,6 +9,10 @@ import com.moayong.api.domain.user.dto.response.UserResponse;
 import com.moayong.api.domain.user.service.UserCommandService;
 import com.moayong.api.domain.user.service.UserService;
 import com.moayong.api.global.api.ApiResponse;
+import com.moayong.api.global.util.CookieUtil;
+import com.moayong.api.global.util.TokenExtractor;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -23,6 +27,7 @@ public class UserController {
     private final UserService userService;
     private final UserCommandService userCommandService;
     private final AuthService authService;
+    private final TokenExtractor tokenExtractor;
 
     @GetMapping("/users/{id}")
     public ApiResponse<UserResponse> findUserById(@PathVariable("id") Long id,
@@ -76,9 +81,17 @@ public class UserController {
 
     @DeleteMapping("/users/{id}")
     public ApiResponse<Void> deleteUser(@PathVariable("id") Long id,
-                                        @AuthenticationPrincipal UserPrincipal principal) {
+                                        @AuthenticationPrincipal UserPrincipal principal,
+                                        HttpServletRequest request,
+                                        HttpServletResponse response) {
         authService.validateUserAccess(id, Long.valueOf(principal.getUserId()));
         userCommandService.deleteUser(id);
+
+        String accessToken = tokenExtractor.extractAccessTokenFromRequest(request);
+        authService.logout(accessToken);
+
+        CookieUtil.deleteCookie(response, "accessToken");
+        CookieUtil.deleteCookie(response, "refreshToken");
 
         return ApiResponse.success(null, "회원 탈퇴 성공");
     }

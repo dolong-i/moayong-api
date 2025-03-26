@@ -12,6 +12,11 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.UUID;
+
 @RequiredArgsConstructor
 @Service
 public class UserCommandService {
@@ -48,9 +53,42 @@ public class UserCommandService {
         return user;
     }
 
+    @Transactional
     public void deleteUser(Long id) {
         User user = userService.findActiveUserById(id);
 
+        anonymizeUserInfo(user);
+        userRepository.save(user);
+
         userRepository.delete(user);
+    }
+
+    public void anonymizeUserInfo(User user) {
+        user.setName("탈퇴유저");
+        user.setNickname(getShortUuid());
+        user.setEmail("deleted-user@example.com");
+        user.setAccountNumber("0000000000");
+    }
+
+    // 8자리 UUID 생성
+    private String getShortUuid() {
+        String uuid = UUID.randomUUID().toString();
+
+        byte[] uuidBytes = uuid.getBytes(StandardCharsets.UTF_8);
+        byte[] hashBytes;
+
+        try {
+            MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
+            hashBytes = messageDigest.digest(uuidBytes);
+        } catch (NoSuchAlgorithmException e) {
+            throw new UserException(UserErrorCode.ERROR_WHILE_DELETING_USER);
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < 4; i++) {
+            sb.append(String.format("%02x", hashBytes[i]));
+        }
+
+        return sb.toString();
     }
 }

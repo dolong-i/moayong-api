@@ -36,6 +36,7 @@ public class User extends BaseEntity {
     @Column(name = "role", nullable = false)
     private Role role;
 
+    @Setter
     @Column(name = "name")
     private String name;
 
@@ -43,6 +44,7 @@ public class User extends BaseEntity {
     @Column(name = "nickname")
     private String nickname;
 
+    @Setter
     @Column(name = "email")
     private String email;
 
