@@ -11,6 +11,7 @@ import com.moayong.api.domain.auth.repository.UserTemporaryRepository;
 import com.moayong.api.domain.leaguemember.service.LeagueMatchService;
 import com.moayong.api.domain.user.domain.User;
 import com.moayong.api.domain.user.service.UserCommandService;
+import com.moayong.api.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +24,7 @@ public class AuthService {
     private final UserTemporaryRepository userTemporaryRepository;
     private final JwtTokenService tokenService;
     private final UserCommandService userCommandService;
+    private final UserService userService;
     private final LeagueMatchService matchService;
 
     public UserTemporary findUserTemporaryById(String id) {
@@ -30,7 +32,13 @@ public class AuthService {
                 .orElseThrow(() -> new AuthException(AuthErrorCode.TOKEN_EXPIRED, "온보딩 토큰이 만료되었습니다"));
     }
 
+    public void checkDuplicateNickname(String nickname) {
+        userService.checkDuplicateNickname(nickname);
+    }
+
     public User completeOnboarding(String accessToken, OnboardingServiceDto onboardingServiceDto) {
+        checkDuplicateNickname(onboardingServiceDto.nickname());
+
         String userTemporaryId = tokenService.getUserTemporaryIdFromToken(accessToken);
         UserTemporary userTemporary = findUserTemporaryById(userTemporaryId);
         userTemporary.setRole(Role.USER);

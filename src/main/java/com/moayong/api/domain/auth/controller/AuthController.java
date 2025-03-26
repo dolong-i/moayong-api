@@ -38,6 +38,13 @@ public class AuthController {
         return ApiResponse.success(null, "토큰 재발급 성공");
     }
 
+    @GetMapping("/onboarding/nickname-check")
+    public ApiResponse<Void> checkDuplicateNickname(@RequestParam("nickname") String nickname) {
+        authService.checkDuplicateNickname(nickname);
+
+        return ApiResponse.success(null, "사용 가능한 닉네임입니다.");
+    }
+
     @PostMapping("/onboarding/complete")
     public ApiResponse<UserResponse> onboardingComplete(HttpServletRequest request, HttpServletResponse response, @RequestBody @Valid OnboardingRequest onboardingRequest) {
         String accessToken = tokenExtractor.extractAccessTokenFromRequest(request);
