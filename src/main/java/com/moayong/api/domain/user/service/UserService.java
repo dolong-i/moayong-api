@@ -36,7 +36,7 @@ public class UserService {
     }
 
     public Optional<User> findByProviderAndProviderIdOptional(AuthProvider provider, String providerId) {
-        return userRepository.findByProviderAndProviderId(provider, providerId);
+        return userRepository.findByProviderAndProviderIdAndDeletedAtIsNull(provider, providerId);
     }
 
     public void checkDuplicateNickname(String nickname) {
