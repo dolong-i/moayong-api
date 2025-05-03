@@ -55,7 +55,7 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
             CookieUtil.addCookie(response, "refreshToken", refreshToken, (int) (tokenService.getRefreshTokenExpiration()));
         }
 
-        String loginSuccessRedirectUri = redirectUri + "/login-success";
+        String loginSuccessRedirectUri = redirectUri + "/login-success" + "?role=" + role.name();
 
         // 프론트엔드로 리다이렉트 (토큰 포함)
         return UriComponentsBuilder.fromUriString(loginSuccessRedirectUri)

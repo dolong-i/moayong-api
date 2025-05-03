@@ -44,7 +44,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         List<String> excludeUrls = List.of(
                 "/api/v1/auth/refresh",
                 "/api/v1/auth/logout",
-                "/api/v1/auth/authorize"
+                "/api/v1/auth/authorize",
+                "/api/v1/verification",
+                "favicon.ico",
+                "/login"
         );
 
         if (excludeUrls.stream().anyMatch(requestURI::startsWith)) {
